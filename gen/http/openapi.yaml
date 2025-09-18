@@ -1,0 +1,252 @@
+swagger: "2.0"
+info:
+    title: Key Stone
+    description: Key Stone is a platform for managing your keys
+    version: v0.0.1
+host: localhost:80
+basePath: /key-stone
+consumes:
+    - application/json
+    - application/xml
+    - application/gob
+produces:
+    - application/json
+    - application/xml
+    - application/gob
+paths:
+    /auth:
+        post:
+            tags:
+                - token
+            summary: issue token
+            operationId: token#issue
+            parameters:
+                - name: IssueRequestBody
+                  in: body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/TokenIssueRequestBody'
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        $ref: '#/definitions/TokenDetail'
+                "400":
+                    description: Bad Request response.
+                    schema:
+                        type: string
+                "401":
+                    description: Unauthorized response.
+                    schema:
+                        type: string
+                "500":
+                    description: Internal Server Error response.
+                    schema:
+                        type: string
+            schemes:
+                - http
+    /auth/refresh:
+        post:
+            tags:
+                - token
+            summary: refresh token
+            operationId: token#refresh
+            parameters:
+                - name: RefreshRequestBody
+                  in: body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/TokenRefreshRequestBody'
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        $ref: '#/definitions/TokenDetail'
+                "400":
+                    description: Bad Request response.
+                    schema:
+                        type: string
+                "401":
+                    description: Unauthorized response.
+                    schema:
+                        type: string
+                "500":
+                    description: Internal Server Error response.
+                    schema:
+                        type: string
+            schemes:
+                - http
+    /users:
+        post:
+            tags:
+                - user
+            summary: create user
+            operationId: user#create
+            parameters:
+                - name: CreateRequestBody
+                  in: body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/UserCreateRequestBody'
+            responses:
+                "204":
+                    description: No Content response.
+                "400":
+                    description: Bad Request response.
+                    schema:
+                        type: string
+                "500":
+                    description: Internal Server Error response.
+                    schema:
+                        type: string
+            schemes:
+                - http
+    /users/me:
+        delete:
+            tags:
+                - user
+            summary: delete user
+            operationId: user#delete
+            parameters:
+                - name: Authorization
+                  in: header
+                  description: The authorization header
+                  required: true
+                  type: string
+            responses:
+                "204":
+                    description: No Content response.
+                "401":
+                    description: Unauthorized response.
+                    schema:
+                        type: string
+                "500":
+                    description: Internal Server Error response.
+                    schema:
+                        type: string
+            schemes:
+                - http
+definitions:
+    IssueInput:
+        title: IssueInput
+        type: object
+        properties:
+            password:
+                type: string
+                description: The password of the user
+                example: Totam voluptate et nihil maxime consequatur qui.
+            username:
+                type: string
+                description: The username of the user
+                example: Beatae consequatur.
+        example:
+            password: Nostrum repellat placeat.
+            username: Excepturi rem ipsum earum quod commodi.
+        required:
+            - username
+            - password
+    RefreshInput:
+        title: RefreshInput
+        type: object
+        properties:
+            access_token:
+                type: string
+                description: The access token of the user
+                example: Autem excepturi tenetur.
+            refresh_token:
+                type: string
+                description: The refresh token of the user
+                example: Nisi reprehenderit et.
+        example:
+            access_token: Expedita quis rerum vel quae.
+            refresh_token: Dolore iste iusto voluptas quo eaque.
+        required:
+            - access_token
+            - refresh_token
+    TokenDetail:
+        title: TokenDetail
+        type: object
+        properties:
+            access_token:
+                type: string
+                description: The access token of the user
+                example: Dolores omnis omnis quo asperiores aliquam.
+            expires_in:
+                type: integer
+                description: The expires in of the user
+                example: 2783656726513327293
+                format: int64
+            refresh_token:
+                type: string
+                description: The refresh token of the user
+                example: Et eveniet quasi laboriosam nobis minus.
+            token_type:
+                type: string
+                description: The token type of the user
+                example: Placeat illo.
+        example:
+            access_token: Ut harum dolores quia aut dolorum ut.
+            expires_in: 3927542106776064148
+            refresh_token: Eius consequatur repellendus.
+            token_type: Quidem quia.
+    TokenIssueRequestBody:
+        title: TokenIssueRequestBody
+        type: object
+        properties:
+            user:
+                $ref: '#/definitions/IssueInput'
+        example:
+            user:
+                password: Fuga vel omnis neque quas animi.
+                username: Iusto ad officia vel.
+    TokenRefreshRequestBody:
+        title: TokenRefreshRequestBody
+        type: object
+        properties:
+            token:
+                $ref: '#/definitions/RefreshInput'
+        example:
+            token:
+                access_token: Suscipit non ad adipisci accusamus.
+                refresh_token: Praesentium dolore.
+    UserCreateRequestBody:
+        title: UserCreateRequestBody
+        type: object
+        properties:
+            user:
+                $ref: '#/definitions/UserInput'
+        example:
+            user:
+                name: Dolores fuga asperiores voluptatem aspernatur eum.
+                password: Sapiente temporibus vel.
+                payload:
+                    Dolorem delectus fugit.: Quia illum facere distinctio quam sunt.
+                    Et rerum quia odit voluptas repudiandae.: Quo dolores.
+    UserInput:
+        title: UserInput
+        type: object
+        properties:
+            name:
+                type: string
+                description: The name of the user
+                example: Dolor ut tempore.
+            password:
+                type: string
+                description: The password of the user
+                example: Odit aspernatur.
+            payload:
+                type: object
+                description: The payload of the user
+                example:
+                    Sit ex ut quis quia mollitia.: Enim numquam nulla dolor.
+                    Tempora et consequatur nam atque soluta.: Sed facilis reprehenderit velit aliquam minima qui.
+                additionalProperties: true
+        example:
+            name: Illo magnam rerum.
+            password: Et omnis ea.
+            payload:
+                Ea cumque et hic.: Non rerum laudantium.
+                Ut facere.: Reiciendis dolor et veniam sapiente fugiat.
+        required:
+            - name
+            - password

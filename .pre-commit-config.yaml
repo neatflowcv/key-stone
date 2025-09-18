@@ -1,0 +1,20 @@
+repos:
+  - repo: local
+    hooks:
+      - id: update module
+        name: update module
+        entry: make update
+        language: system
+        always_run: true
+
+      - id: golangci-lint
+        name: golangci-lint
+        entry: make lint
+        language: system
+        types: [go]
+
+      - id: test
+        name: test
+        entry: make test
+        language: system
+        types: [go]
