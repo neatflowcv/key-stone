@@ -1,0 +1,46 @@
+@startuml class
+
+class Handler
+class Service
+
+together {
+    class Credential {
+        username: string
+        password: string
+    }
+
+    class TokenPolicy {
+        accessTokenDuration: Duration
+        refreshTokenDuration: Duration
+    }
+}
+
+interface CredentialRepository {
+    CreateCredential(ctx: Context, credential: Credential): (Credential, error)
+    DeleteCredential(ctx: Context, credential: Credential): error
+    GetCredential(ctx: Context, username: string): (Credential, error)
+}
+
+interface TokenGenerator {
+    GenerateToken(subject: string, duration: Time, now: Time): string
+    ParseToken(token: string, now: Time): (string, error)
+}
+
+class FileCredentialRepository implements CredentialRepository
+class MemoryCredentialRepository implements CredentialRepository
+
+class JWTTokenGenerator implements TokenGenerator {
+    JWT
+}
+
+Credential <.. CredentialRepository
+
+Service <-- Handler
+
+TokenPolicy <.. Service
+
+CredentialRepository --o Service
+TokenGenerator --o Service: public
+TokenGenerator --o Service: private
+
+@enduml
