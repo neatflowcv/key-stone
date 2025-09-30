@@ -2,7 +2,10 @@ module github.com/neatflowcv/key-stone
 
 go 1.25.1
 
-require goa.design/goa/v3 v3.22.3
+require (
+	github.com/golang-jwt/jwt/v5 v5.3.0
+	goa.design/goa/v3 v3.22.3
+)
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
