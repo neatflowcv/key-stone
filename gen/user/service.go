@@ -53,8 +53,6 @@ type UserInput struct {
 	Username string
 	// The password of the user
 	Password string
-	// The payload of the user
-	Payload map[string]any
 }
 
 // MakeBadRequest builds a goa.ServiceError from an error.

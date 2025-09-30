@@ -151,14 +151,6 @@ func unmarshalUserInputRequestBodyToUserUserInput(v *UserInputRequestBody) *user
 		Username: *v.Username,
 		Password: *v.Password,
 	}
-	if v.Payload != nil {
-		res.Payload = make(map[string]any, len(v.Payload))
-		for key, val := range v.Payload {
-			tk := key
-			tv := val
-			res.Payload[tk] = tv
-		}
-	}
 
 	return res
 }

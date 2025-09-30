@@ -98,7 +98,6 @@ var _ = Service("token", func() {
 var UserInput = Type("UserInput", func() { //nolint:gochecknoglobals
 	Attribute("username", String, "The name of the user")
 	Attribute("password", String, "The password of the user")
-	Attribute("payload", MapOf(String, Any), "The payload of the user")
 
 	Required("username", "password")
 })

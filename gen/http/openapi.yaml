@@ -134,14 +134,14 @@ definitions:
             password:
                 type: string
                 description: The password of the user
-                example: Recusandae illo magnam rerum.
+                example: Accusamus quia.
             username:
                 type: string
                 description: The username of the user
-                example: Quis quia mollitia consectetur enim numquam nulla.
+                example: Dicta suscipit non ad.
         example:
-            password: Cumque ut facere.
-            username: Et omnis ea.
+            password: Voluptatem voluptatibus.
+            username: Dolore omnis.
         required:
             - username
             - password
@@ -152,14 +152,14 @@ definitions:
             access_token:
                 type: string
                 description: The access token of the user
-                example: Non rerum laudantium.
+                example: Alias consequatur.
             refresh_token:
                 type: string
                 description: The refresh token of the user
-                example: Dolores omnis omnis quo asperiores aliquam.
+                example: Ducimus reprehenderit assumenda dolor.
         example:
-            access_token: Placeat illo.
-            refresh_token: Reprehenderit et eveniet quasi laboriosam nobis minus.
+            access_token: Fugit sed nemo maxime eaque tempora.
+            refresh_token: Tenetur consequatur ex asperiores rerum possimus qui.
         required:
             - access_token
             - refresh_token
@@ -170,25 +170,25 @@ definitions:
             access_token:
                 type: string
                 description: The access token of the user
-                example: Asperiores rerum possimus.
+                example: Ut nihil id alias.
             expires_in:
                 type: integer
                 description: The expires in of the user
-                example: 8279315110880751817
+                example: 7202668737544758951
                 format: int64
             refresh_token:
                 type: string
                 description: The refresh token of the user
-                example: Sint quae consequuntur quibusdam.
+                example: Quidem nobis nihil impedit.
             token_type:
                 type: string
                 description: The token type of the user
-                example: Numquam aut officiis ea ipsa qui.
+                example: Optio fugiat voluptatem accusantium minus.
         example:
-            access_token: Vel libero dolor.
-            expires_in: 8657021756071454378
-            refresh_token: Consequatur nam atque.
-            token_type: Tempore corporis odit aspernatur et dolorum.
+            access_token: Autem odio nihil earum expedita.
+            expires_in: 2799093750981729898
+            refresh_token: Nihil consequatur incidunt.
+            token_type: Ex vel et.
         required:
             - access_token
             - token_type
@@ -201,7 +201,7 @@ definitions:
             fault:
                 type: boolean
                 description: Is the error a server-side fault?
-                example: true
+                example: false
             id:
                 type: string
                 description: ID is a unique identifier for this particular occurrence of the problem.
@@ -228,7 +228,7 @@ definitions:
             id: 123abc
             message: parameter 'p' must be an integer
             name: bad_request
-            temporary: false
+            temporary: true
             timeout: true
         required:
             - name
@@ -245,8 +245,8 @@ definitions:
                 $ref: '#/definitions/IssueInput'
         example:
             user:
-                password: Nobis est sunt consectetur dolore et.
-                username: Fugiat quos.
+                password: Sapiente temporibus vel.
+                username: Dolores fuga asperiores voluptatem aspernatur eum.
         required:
             - user
     TokenIssueUnauthorizedResponseBody:
@@ -256,7 +256,7 @@ definitions:
             fault:
                 type: boolean
                 description: Is the error a server-side fault?
-                example: false
+                example: true
             id:
                 type: string
                 description: ID is a unique identifier for this particular occurrence of the problem.
@@ -272,18 +272,18 @@ definitions:
             temporary:
                 type: boolean
                 description: Is the error temporary?
-                example: true
+                example: false
             timeout:
                 type: boolean
                 description: Is the error a timeout?
-                example: false
+                example: true
         description: Unauthorized (default view)
         example:
             fault: true
             id: 123abc
             message: parameter 'p' must be an integer
             name: bad_request
-            temporary: false
+            temporary: true
             timeout: false
         required:
             - name
@@ -315,7 +315,7 @@ definitions:
             temporary:
                 type: boolean
                 description: Is the error temporary?
-                example: true
+                example: false
             timeout:
                 type: boolean
                 description: Is the error a timeout?
@@ -326,7 +326,7 @@ definitions:
             id: 123abc
             message: parameter 'p' must be an integer
             name: bad_request
-            temporary: false
+            temporary: true
             timeout: false
         required:
             - name
@@ -343,8 +343,8 @@ definitions:
                 $ref: '#/definitions/RefreshInput'
         example:
             token:
-                access_token: Reiciendis blanditiis porro qui unde maiores reprehenderit.
-                refresh_token: Qui in molestiae repellat voluptatem.
+                access_token: Sed alias qui mollitia ab delectus a.
+                refresh_token: Ducimus laboriosam exercitationem eos.
         required:
             - token
     TokenRefreshUnauthorizedResponseBody:
@@ -354,7 +354,7 @@ definitions:
             fault:
                 type: boolean
                 description: Is the error a server-side fault?
-                example: false
+                example: true
             id:
                 type: string
                 description: ID is a unique identifier for this particular occurrence of the problem.
@@ -370,19 +370,19 @@ definitions:
             temporary:
                 type: boolean
                 description: Is the error temporary?
-                example: true
+                example: false
             timeout:
                 type: boolean
                 description: Is the error a timeout?
                 example: false
         description: Unauthorized (default view)
         example:
-            fault: false
+            fault: true
             id: 123abc
             message: parameter 'p' must be an integer
             name: bad_request
-            temporary: false
-            timeout: true
+            temporary: true
+            timeout: false
         required:
             - name
             - id
@@ -413,7 +413,7 @@ definitions:
             temporary:
                 type: boolean
                 description: Is the error temporary?
-                example: true
+                example: false
             timeout:
                 type: boolean
                 description: Is the error a timeout?
@@ -425,7 +425,7 @@ definitions:
             message: parameter 'p' must be an integer
             name: bad_request
             temporary: true
-            timeout: true
+            timeout: false
         required:
             - name
             - id
@@ -441,11 +441,8 @@ definitions:
                 $ref: '#/definitions/UserInput'
         example:
             user:
-                password: Sapiente temporibus vel.
-                payload:
-                    Dolorem delectus fugit.: Quia illum facere distinctio quam sunt.
-                    Et rerum quia odit voluptas repudiandae.: Quo dolores.
-                username: Dolores fuga asperiores voluptatem aspernatur eum.
+                password: Occaecati vel adipisci.
+                username: Quia architecto veritatis deleniti ea perferendis.
         required:
             - user
     UserDeleteUnauthorizedResponseBody:
@@ -471,18 +468,18 @@ definitions:
             temporary:
                 type: boolean
                 description: Is the error temporary?
-                example: false
+                example: true
             timeout:
                 type: boolean
                 description: Is the error a timeout?
-                example: false
+                example: true
         description: Unauthorized (default view)
         example:
-            fault: false
+            fault: true
             id: 123abc
             message: parameter 'p' must be an integer
             name: bad_request
-            temporary: false
+            temporary: true
             timeout: true
         required:
             - name
@@ -498,23 +495,14 @@ definitions:
             password:
                 type: string
                 description: The password of the user
-                example: Eligendi nihil consequatur.
-            payload:
-                type: object
-                description: The payload of the user
-                example:
-                    Suscipit non ad adipisci accusamus.: Praesentium dolore.
-                    Tempora numquam nisi eaque.: Explicabo ipsum distinctio consequatur consectetur blanditiis repudiandae.
-                additionalProperties: true
+                example: Maiores reprehenderit occaecati.
             username:
                 type: string
                 description: The name of the user
-                example: Expedita soluta ex vel et.
+                example: Repudiandae reiciendis blanditiis porro qui.
         example:
-            password: Odit in molestiae quos laborum illum.
-            payload:
-                Doloribus qui est alias consequatur illum ducimus.: Assumenda dolor rerum fugit sed nemo.
-            username: Iste voluptatem voluptatibus aspernatur.
+            password: Iusto ad officia vel.
+            username: In molestiae repellat voluptatem.
         required:
             - username
             - password

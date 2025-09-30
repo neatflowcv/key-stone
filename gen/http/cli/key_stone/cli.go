@@ -33,18 +33,14 @@ func UsageCommands() []string {
 func UsageExamples() string {
 	return os.Args[0] + ` user create --body '{
       "user": {
-         "password": "Sapiente temporibus vel.",
-         "payload": {
-            "Dolorem delectus fugit.": "Quia illum facere distinctio quam sunt.",
-            "Et rerum quia odit voluptas repudiandae.": "Quo dolores."
-         },
-         "username": "Dolores fuga asperiores voluptatem aspernatur eum."
+         "password": "Occaecati vel adipisci.",
+         "username": "Quia architecto veritatis deleniti ea perferendis."
       }
    }'` + "\n" +
 		os.Args[0] + ` token issue --body '{
       "user": {
-         "password": "Nobis est sunt consectetur dolore et.",
-         "username": "Fugiat quos."
+         "password": "Sapiente temporibus vel.",
+         "username": "Dolores fuga asperiores voluptatem aspernatur eum."
       }
    }'` + "\n" +
 		""
@@ -216,12 +212,8 @@ func userCreateUsage() {
 	fmt.Fprintln(os.Stderr, "Example:")
 	fmt.Fprintf(os.Stderr, "    %s %s\n", os.Args[0], `user create --body '{
       "user": {
-         "password": "Sapiente temporibus vel.",
-         "payload": {
-            "Dolorem delectus fugit.": "Quia illum facere distinctio quam sunt.",
-            "Et rerum quia odit voluptas repudiandae.": "Quo dolores."
-         },
-         "username": "Dolores fuga asperiores voluptatem aspernatur eum."
+         "password": "Occaecati vel adipisci.",
+         "username": "Quia architecto veritatis deleniti ea perferendis."
       }
    }'`)
 }
@@ -242,7 +234,7 @@ func userDeleteUsage() {
 	// Example block: pass example as parameter to avoid format parsing of % characters
 	fmt.Fprintln(os.Stderr)
 	fmt.Fprintln(os.Stderr, "Example:")
-	fmt.Fprintf(os.Stderr, "    %s %s\n", os.Args[0], `user delete --authorization "A inventore ducimus laboriosam exercitationem."`)
+	fmt.Fprintf(os.Stderr, "    %s %s\n", os.Args[0], `user delete --authorization "Qui fugit delectus voluptas explicabo."`)
 }
 
 // tokenUsage displays the usage of the token command and its subcommands.
@@ -274,8 +266,8 @@ func tokenIssueUsage() {
 	fmt.Fprintln(os.Stderr, "Example:")
 	fmt.Fprintf(os.Stderr, "    %s %s\n", os.Args[0], `token issue --body '{
       "user": {
-         "password": "Nobis est sunt consectetur dolore et.",
-         "username": "Fugiat quos."
+         "password": "Sapiente temporibus vel.",
+         "username": "Dolores fuga asperiores voluptatem aspernatur eum."
       }
    }'`)
 }
@@ -298,8 +290,8 @@ func tokenRefreshUsage() {
 	fmt.Fprintln(os.Stderr, "Example:")
 	fmt.Fprintf(os.Stderr, "    %s %s\n", os.Args[0], `token refresh --body '{
       "token": {
-         "access_token": "Reiciendis blanditiis porro qui unde maiores reprehenderit.",
-         "refresh_token": "Qui in molestiae repellat voluptatem."
+         "access_token": "Sed alias qui mollitia ab delectus a.",
+         "refresh_token": "Ducimus laboriosam exercitationem eos."
       }
    }'`)
 }

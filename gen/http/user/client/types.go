@@ -60,8 +60,6 @@ type UserInputRequestBody struct {
 	Username string `form:"username" json:"username" xml:"username"`
 	// The password of the user
 	Password string `form:"password" json:"password" xml:"password"`
-	// The payload of the user
-	Payload map[string]any `form:"payload,omitempty" json:"payload,omitempty" xml:"payload,omitempty"`
 }
 
 // NewCreateRequestBody builds the HTTP request body from the payload of the

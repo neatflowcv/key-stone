@@ -175,14 +175,6 @@ func marshalUserUserInputToUserInputRequestBody(v *user.UserInput) *UserInputReq
 		Username: v.Username,
 		Password: v.Password,
 	}
-	if v.Payload != nil {
-		res.Payload = make(map[string]any, len(v.Payload))
-		for key, val := range v.Payload {
-			tk := key
-			tv := val
-			res.Payload[tk] = tv
-		}
-	}
 
 	return res
 }
@@ -193,14 +185,6 @@ func marshalUserInputRequestBodyToUserUserInput(v *UserInputRequestBody) *user.U
 	res := &user.UserInput{
 		Username: v.Username,
 		Password: v.Password,
-	}
-	if v.Payload != nil {
-		res.Payload = make(map[string]any, len(v.Payload))
-		for key, val := range v.Payload {
-			tk := key
-			tv := val
-			res.Payload[tk] = tv
-		}
 	}
 
 	return res

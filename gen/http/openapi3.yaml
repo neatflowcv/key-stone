@@ -18,11 +18,11 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/IssueRequestBody'
+                            $ref: '#/components/schemas/CreateRequestBody'
                         example:
                             user:
-                                password: Nobis est sunt consectetur dolore et.
-                                username: Fugiat quos.
+                                password: Sapiente temporibus vel.
+                                username: Dolores fuga asperiores voluptatem aspernatur eum.
             responses:
                 "200":
                     description: OK response.
@@ -31,10 +31,10 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/TokenDetail'
                             example:
-                                access_token: Cumque quia et cumque.
-                                expires_in: 9017755827570347603
-                                refresh_token: Et voluptatem.
-                                token_type: Quia aperiam tempore id.
+                                access_token: Illo et rerum quia odit voluptas.
+                                expires_in: 211348543797255040
+                                refresh_token: Fugit et.
+                                token_type: Saepe quo dolores dolorum.
                 "400":
                     description: 'BadRequest: Bad Request'
                     content:
@@ -61,8 +61,8 @@ paths:
                             $ref: '#/components/schemas/RefreshRequestBody'
                         example:
                             token:
-                                access_token: Reiciendis blanditiis porro qui unde maiores reprehenderit.
-                                refresh_token: Qui in molestiae repellat voluptatem.
+                                access_token: Sed alias qui mollitia ab delectus a.
+                                refresh_token: Ducimus laboriosam exercitationem eos.
             responses:
                 "200":
                     description: OK response.
@@ -71,10 +71,10 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/TokenDetail'
                             example:
-                                access_token: Iusto ad officia vel.
-                                expires_in: 7427244540271552702
-                                refresh_token: Id alias culpa optio fugiat voluptatem.
-                                token_type: Fuga vel omnis neque quas animi.
+                                access_token: Sit culpa fugiat quos temporibus nobis est.
+                                expires_in: 4474053281006103846
+                                refresh_token: Suscipit quia.
+                                token_type: Consectetur dolore et minus cumque quia.
                 "400":
                     description: 'BadRequest: Bad Request'
                     content:
@@ -101,11 +101,8 @@ paths:
                             $ref: '#/components/schemas/CreateRequestBody'
                         example:
                             user:
-                                password: Sapiente temporibus vel.
-                                payload:
-                                    Dolorem delectus fugit.: Quia illum facere distinctio quam sunt.
-                                    Et rerum quia odit voluptas repudiandae.: Quo dolores.
-                                username: Dolores fuga asperiores voluptatem aspernatur eum.
+                                password: Occaecati vel adipisci.
+                                username: Quia architecto veritatis deleniti ea perferendis.
             responses:
                 "204":
                     description: No Content response.
@@ -139,11 +136,8 @@ components:
                     $ref: '#/components/schemas/UserInput'
             example:
                 user:
-                    password: Sapiente temporibus vel.
-                    payload:
-                        Dolorem delectus fugit.: Quia illum facere distinctio quam sunt.
-                        Et rerum quia odit voluptas repudiandae.: Quo dolores.
-                    username: Dolores fuga asperiores voluptatem aspernatur eum.
+                    password: Occaecati vel adipisci.
+                    username: Quia architecto veritatis deleniti ea perferendis.
             required:
                 - user
         DeleteUserPayload:
@@ -152,9 +146,9 @@ components:
                 Authorization:
                     type: string
                     description: The payload of the user
-                    example: Cum sed saepe repudiandae aut.
+                    example: Et consequatur nam atque soluta quos sed.
             example:
-                Authorization: Numquam debitis rerum.
+                Authorization: Reprehenderit velit aliquam minima qui harum.
             required:
                 - Authorization
         Error:
@@ -163,7 +157,7 @@ components:
                 fault:
                     type: boolean
                     description: Is the error a server-side fault?
-                    example: false
+                    example: true
                 id:
                     type: string
                     description: ID is a unique identifier for this particular occurrence of the problem.
@@ -183,7 +177,7 @@ components:
                 timeout:
                     type: boolean
                     description: Is the error a timeout?
-                    example: false
+                    example: true
             description: Bad Request
             example:
                 fault: false
@@ -191,7 +185,7 @@ components:
                 message: parameter 'p' must be an integer
                 name: bad_request
                 temporary: false
-                timeout: true
+                timeout: false
             required:
                 - name
                 - id
@@ -205,42 +199,31 @@ components:
                 password:
                     type: string
                     description: The password of the user
-                    example: Laboriosam aut sint maiores rerum qui quos.
+                    example: Quia mollitia consectetur enim.
                 username:
                     type: string
                     description: The username of the user
-                    example: Officiis est.
+                    example: Ex ut.
             example:
-                password: Explicabo aliquam.
-                username: Facere nihil commodi ipsum.
+                password: Rerum qui et omnis.
+                username: Nulla dolor recusandae illo.
             required:
                 - username
                 - password
-        IssueRequestBody:
-            type: object
-            properties:
-                user:
-                    $ref: '#/components/schemas/IssueInput'
-            example:
-                user:
-                    password: Nobis est sunt consectetur dolore et.
-                    username: Fugiat quos.
-            required:
-                - user
         RefreshInput:
             type: object
             properties:
                 access_token:
                     type: string
                     description: The access token of the user
-                    example: Aspernatur itaque ex cum mollitia.
+                    example: Quasi laboriosam nobis minus voluptatem ut.
                 refresh_token:
                     type: string
                     description: The refresh token of the user
-                    example: Voluptas rem dolorum excepturi ut.
+                    example: Dolores quia aut.
             example:
-                access_token: Consequuntur voluptatem sint voluptatem.
-                refresh_token: Alias ad est delectus error quas minus.
+                access_token: Ut cum quidem quia dolorum esse.
+                refresh_token: Consequatur repellendus ab beatae consequatur.
             required:
                 - access_token
                 - refresh_token
@@ -251,8 +234,8 @@ components:
                     $ref: '#/components/schemas/RefreshInput'
             example:
                 token:
-                    access_token: Reiciendis blanditiis porro qui unde maiores reprehenderit.
-                    refresh_token: Qui in molestiae repellat voluptatem.
+                    access_token: Sed alias qui mollitia ab delectus a.
+                    refresh_token: Ducimus laboriosam exercitationem eos.
             required:
                 - token
         TokenDetail:
@@ -261,25 +244,25 @@ components:
                 access_token:
                     type: string
                     description: The access token of the user
-                    example: Excepturi est.
+                    example: Molestiae cumque ut facere.
                 expires_in:
                     type: integer
                     description: The expires in of the user
-                    example: 6305677979173278738
+                    example: 2950528847670145197
                     format: int64
                 refresh_token:
                     type: string
                     description: The refresh token of the user
-                    example: Vel dolor deserunt quia non omnis.
+                    example: Cumque et hic omnis non rerum.
                 token_type:
                     type: string
                     description: The token type of the user
-                    example: Et quis est dolor quis ea voluptatem.
+                    example: Reiciendis dolor et veniam sapiente fugiat.
             example:
-                access_token: Unde officiis ipsam.
-                expires_in: 9114112343225410739
-                refresh_token: Sed quis ut vel.
-                token_type: Quas architecto dolores autem earum.
+                access_token: Rerum dolores omnis.
+                expires_in: 1504666541525797473
+                refresh_token: Molestiae reprehenderit et.
+                token_type: Quo asperiores aliquam ducimus.
             required:
                 - access_token
                 - token_type
@@ -291,25 +274,14 @@ components:
                 password:
                     type: string
                     description: The password of the user
-                    example: Quidem quia.
-                payload:
-                    type: object
-                    description: The payload of the user
-                    example:
-                        Eius consequatur repellendus.: Beatae consequatur.
-                        Totam voluptate et nihil maxime consequatur qui.: Excepturi rem ipsum earum quod commodi.
-                    additionalProperties: true
+                    example: Repellendus in sint quae consequuntur quibusdam.
                 username:
                     type: string
                     description: The name of the user
-                    example: Ut harum dolores quia aut dolorum ut.
+                    example: Aut officiis ea ipsa.
             example:
-                password: Autem excepturi tenetur.
-                payload:
-                    Eaque commodi velit voluptatem dolores sit.: Dolores quam aut consequatur.
-                    Labore cum adipisci.: Nulla vel autem.
-                    Reprehenderit et qui expedita quis rerum.: Quae corrupti dolore iste iusto voluptas.
-                username: Nostrum repellat placeat.
+                password: Tempore corporis odit aspernatur et dolorum.
+                username: Vel libero dolor.
             required:
                 - username
                 - password
