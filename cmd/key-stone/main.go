@@ -9,6 +9,9 @@ import (
 	"github.com/neatflowcv/key-stone/gen/token"
 	"github.com/neatflowcv/key-stone/gen/user"
 	goahttp "goa.design/goa/v3/http"
+
+	_ "goa.design/goa/v3/codegen"
+	_ "goa.design/goa/v3/codegen/generator"
 )
 
 var version = "dev"
