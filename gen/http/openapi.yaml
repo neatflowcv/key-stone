@@ -33,6 +33,11 @@ paths:
                     description: OK response.
                     schema:
                         $ref: '#/definitions/TokenDetail'
+                        required:
+                            - access_token
+                            - token_type
+                            - expires_in
+                            - refresh_token
                 "400":
                     description: Bad Request response.
                     schema:
@@ -62,6 +67,11 @@ paths:
                     description: OK response.
                     schema:
                         $ref: '#/definitions/TokenDetail'
+                        required:
+                            - access_token
+                            - token_type
+                            - expires_in
+                            - refresh_token
                 "400":
                     description: Bad Request response.
                     schema:
@@ -179,6 +189,11 @@ definitions:
             expires_in: 8657021756071454378
             refresh_token: Consequatur nam atque.
             token_type: Tempore corporis odit aspernatur et dolorum.
+        required:
+            - access_token
+            - token_type
+            - expires_in
+            - refresh_token
     TokenIssueBadRequestResponseBody:
         title: 'Mediatype identifier: application/vnd.goa.error; view=default'
         type: object

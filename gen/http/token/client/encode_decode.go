@@ -80,6 +80,10 @@ func DecodeIssueResponse(decoder func(*http.Response) goahttp.Decoder, restoreBo
 			if err != nil {
 				return nil, goahttp.ErrDecodingError("token", "issue", err)
 			}
+			err = ValidateIssueResponseBody(&body)
+			if err != nil {
+				return nil, goahttp.ErrValidationError("token", "issue", err)
+			}
 			res := NewIssueTokenDetailOK(&body)
 			return res, nil
 		case http.StatusBadRequest:
@@ -178,6 +182,10 @@ func DecodeRefreshResponse(decoder func(*http.Response) goahttp.Decoder, restore
 			err = decoder(resp).Decode(&body)
 			if err != nil {
 				return nil, goahttp.ErrDecodingError("token", "refresh", err)
+			}
+			err = ValidateRefreshResponseBody(&body)
+			if err != nil {
+				return nil, goahttp.ErrValidationError("token", "refresh", err)
 			}
 			res := NewRefreshTokenDetailOK(&body)
 			return res, nil

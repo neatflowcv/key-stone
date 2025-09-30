@@ -162,10 +162,10 @@ func NewRefreshRequestBody(p *token.RefreshPayload) *RefreshRequestBody {
 // a HTTP "OK" response.
 func NewIssueTokenDetailOK(body *IssueResponseBody) *token.TokenDetail {
 	v := &token.TokenDetail{
-		AccessToken:  body.AccessToken,
-		TokenType:    body.TokenType,
-		ExpiresIn:    body.ExpiresIn,
-		RefreshToken: body.RefreshToken,
+		AccessToken:  *body.AccessToken,
+		TokenType:    *body.TokenType,
+		ExpiresIn:    *body.ExpiresIn,
+		RefreshToken: *body.RefreshToken,
 	}
 
 	return v
@@ -204,10 +204,10 @@ func NewIssueUnauthorized(body *IssueUnauthorizedResponseBody) *goa.ServiceError
 // from a HTTP "OK" response.
 func NewRefreshTokenDetailOK(body *RefreshResponseBody) *token.TokenDetail {
 	v := &token.TokenDetail{
-		AccessToken:  body.AccessToken,
-		TokenType:    body.TokenType,
-		ExpiresIn:    body.ExpiresIn,
-		RefreshToken: body.RefreshToken,
+		AccessToken:  *body.AccessToken,
+		TokenType:    *body.TokenType,
+		ExpiresIn:    *body.ExpiresIn,
+		RefreshToken: *body.RefreshToken,
 	}
 
 	return v
@@ -241,6 +241,41 @@ func NewRefreshUnauthorized(body *RefreshUnauthorizedResponseBody) *goa.ServiceE
 	}
 
 	return v
+}
+
+// ValidateIssueResponseBody runs the validations defined on IssueResponseBody
+func ValidateIssueResponseBody(body *IssueResponseBody) (err error) {
+	if body.AccessToken == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("access_token", "body"))
+	}
+	if body.TokenType == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("token_type", "body"))
+	}
+	if body.ExpiresIn == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("expires_in", "body"))
+	}
+	if body.RefreshToken == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("refresh_token", "body"))
+	}
+	return
+}
+
+// ValidateRefreshResponseBody runs the validations defined on
+// RefreshResponseBody
+func ValidateRefreshResponseBody(body *RefreshResponseBody) (err error) {
+	if body.AccessToken == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("access_token", "body"))
+	}
+	if body.TokenType == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("token_type", "body"))
+	}
+	if body.ExpiresIn == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("expires_in", "body"))
+	}
+	if body.RefreshToken == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("refresh_token", "body"))
+	}
+	return
 }
 
 // ValidateIssueBadRequestResponseBody runs the validations defined on

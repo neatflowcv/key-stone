@@ -280,6 +280,11 @@ components:
                 expires_in: 9114112343225410739
                 refresh_token: Sed quis ut vel.
                 token_type: Quas architecto dolores autem earum.
+            required:
+                - access_token
+                - token_type
+                - expires_in
+                - refresh_token
         UserInput:
             type: object
             properties:

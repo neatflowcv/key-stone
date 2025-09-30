@@ -28,26 +28,26 @@ type RefreshRequestBody struct {
 // response body.
 type IssueResponseBody struct {
 	// The access token of the user
-	AccessToken *string `form:"access_token,omitempty" json:"access_token,omitempty" xml:"access_token,omitempty"`
+	AccessToken string `form:"access_token" json:"access_token" xml:"access_token"`
 	// The token type of the user
-	TokenType *string `form:"token_type,omitempty" json:"token_type,omitempty" xml:"token_type,omitempty"`
+	TokenType string `form:"token_type" json:"token_type" xml:"token_type"`
 	// The expires in of the user
-	ExpiresIn *int `form:"expires_in,omitempty" json:"expires_in,omitempty" xml:"expires_in,omitempty"`
+	ExpiresIn int `form:"expires_in" json:"expires_in" xml:"expires_in"`
 	// The refresh token of the user
-	RefreshToken *string `form:"refresh_token,omitempty" json:"refresh_token,omitempty" xml:"refresh_token,omitempty"`
+	RefreshToken string `form:"refresh_token" json:"refresh_token" xml:"refresh_token"`
 }
 
 // RefreshResponseBody is the type of the "token" service "refresh" endpoint
 // HTTP response body.
 type RefreshResponseBody struct {
 	// The access token of the user
-	AccessToken *string `form:"access_token,omitempty" json:"access_token,omitempty" xml:"access_token,omitempty"`
+	AccessToken string `form:"access_token" json:"access_token" xml:"access_token"`
 	// The token type of the user
-	TokenType *string `form:"token_type,omitempty" json:"token_type,omitempty" xml:"token_type,omitempty"`
+	TokenType string `form:"token_type" json:"token_type" xml:"token_type"`
 	// The expires in of the user
-	ExpiresIn *int `form:"expires_in,omitempty" json:"expires_in,omitempty" xml:"expires_in,omitempty"`
+	ExpiresIn int `form:"expires_in" json:"expires_in" xml:"expires_in"`
 	// The refresh token of the user
-	RefreshToken *string `form:"refresh_token,omitempty" json:"refresh_token,omitempty" xml:"refresh_token,omitempty"`
+	RefreshToken string `form:"refresh_token" json:"refresh_token" xml:"refresh_token"`
 }
 
 // IssueBadRequestResponseBody is the type of the "token" service "issue"

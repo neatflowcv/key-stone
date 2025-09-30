@@ -109,14 +109,13 @@ func (h *Handler) generate(now time.Time, subject string) (*token.TokenDetail, e
 
 	accessToken := h.pubVault.Encrypt(now, accessTokenDuration, subject)
 	refreshToken := h.priVault.Encrypt(now, refreshTokenDuration, subject)
-
 	tokenType := "Bearer"
 	expiresIn := int(accessTokenDuration.Seconds())
 
 	return &token.TokenDetail{
-		AccessToken:  &accessToken,
-		TokenType:    &tokenType,
-		ExpiresIn:    &expiresIn,
-		RefreshToken: &refreshToken,
+		AccessToken:  accessToken,
+		TokenType:    tokenType,
+		ExpiresIn:    expiresIn,
+		RefreshToken: refreshToken,
 	}, nil
 }

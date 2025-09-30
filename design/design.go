@@ -121,6 +121,8 @@ var TokenDetail = Type("TokenDetail", func() { //nolint:gochecknoglobals
 	Attribute("token_type", String, "The token type of the user")
 	Attribute("expires_in", Int, "The expires in of the user")
 	Attribute("refresh_token", String, "The refresh token of the user")
+
+	Required("access_token", "token_type", "expires_in", "refresh_token")
 })
 
 var RefreshInput = Type("RefreshInput", func() { //nolint:gochecknoglobals

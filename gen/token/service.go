@@ -64,13 +64,13 @@ type RefreshPayload struct {
 // TokenDetail is the result type of the token service issue method.
 type TokenDetail struct {
 	// The access token of the user
-	AccessToken *string
+	AccessToken string
 	// The token type of the user
-	TokenType *string
+	TokenType string
 	// The expires in of the user
-	ExpiresIn *int
+	ExpiresIn int
 	// The refresh token of the user
-	RefreshToken *string
+	RefreshToken string
 }
 
 // MakeBadRequest builds a goa.ServiceError from an error.
