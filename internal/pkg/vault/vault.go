@@ -41,37 +41,22 @@ func (v *Vault) Encrypt(issuedAt time.Time, duration time.Duration, subject stri
 	return token
 }
 
-var (
-	ErrInvalidMethod = errors.New("unexpected signing method")
-)
-
-func (v *Vault) Decrypt(now time.Time, encryptedValue string) (string, error) {
+func (v *Vault) Decrypt(now time.Time, token string) (string, error) {
 	var claims jwt.RegisteredClaims
 
-	_, err := jwt.ParseWithClaims(encryptedValue, &claims, func(token *jwt.Token) (any, error) {
+	_, err := jwt.ParseWithClaims(token, &claims, func(token *jwt.Token) (any, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, ErrInvalidMethod
+			return nil, fmt.Errorf("unexpected signing method: %w", ErrInvalidToken)
 		}
 
 		return v.secretKey, nil
 	}, jwt.WithTimeFunc(func() time.Time { return now }))
 	if err != nil {
-		switch {
-		case errors.Is(err, jwt.ErrTokenMalformed):
-			return "", ErrInvalidMethod
-		case errors.Is(err, jwt.ErrTokenSignatureInvalid):
-			return "", ErrInvalidMethod
-		case errors.Is(err, jwt.ErrTokenExpired):
-			return "", ErrInvalidMethod
-		case errors.Is(err, ErrInvalidMethod):
-			return "", ErrInvalidMethod
-		default:
-			return "", fmt.Errorf("failed to parse token: %w", err)
-		}
+		return "", errors.Join(ErrInvalidToken, err)
 	}
 
 	if claims.Issuer != v.issuer {
-		return "", ErrInvalidMethod
+		return "", fmt.Errorf("invalid issuer: %w", ErrInvalidToken)
 	}
 
 	return claims.Subject, nil
