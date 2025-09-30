@@ -33,12 +33,12 @@ func UsageCommands() []string {
 func UsageExamples() string {
 	return os.Args[0] + ` user create --body '{
       "user": {
-         "name": "Dolores fuga asperiores voluptatem aspernatur eum.",
          "password": "Sapiente temporibus vel.",
          "payload": {
             "Dolorem delectus fugit.": "Quia illum facere distinctio quam sunt.",
             "Et rerum quia odit voluptas repudiandae.": "Quo dolores."
-         }
+         },
+         "username": "Dolores fuga asperiores voluptatem aspernatur eum."
       }
    }'` + "\n" +
 		os.Args[0] + ` token issue --body '{
@@ -216,12 +216,12 @@ func userCreateUsage() {
 	fmt.Fprintln(os.Stderr, "Example:")
 	fmt.Fprintf(os.Stderr, "    %s %s\n", os.Args[0], `user create --body '{
       "user": {
-         "name": "Dolores fuga asperiores voluptatem aspernatur eum.",
          "password": "Sapiente temporibus vel.",
          "payload": {
             "Dolorem delectus fugit.": "Quia illum facere distinctio quam sunt.",
             "Et rerum quia odit voluptas repudiandae.": "Quo dolores."
-         }
+         },
+         "username": "Dolores fuga asperiores voluptatem aspernatur eum."
       }
    }'`)
 }

@@ -57,7 +57,7 @@ type DeleteUnauthorizedResponseBody struct {
 // UserInputRequestBody is used to define fields on request body types.
 type UserInputRequestBody struct {
 	// The name of the user
-	Name string `form:"name" json:"name" xml:"name"`
+	Username string `form:"username" json:"username" xml:"username"`
 	// The password of the user
 	Password string `form:"password" json:"password" xml:"password"`
 	// The payload of the user

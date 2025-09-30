@@ -50,7 +50,7 @@ type DeleteUserPayload struct {
 
 type UserInput struct {
 	// The name of the user
-	Name string
+	Username string
 	// The password of the user
 	Password string
 	// The payload of the user

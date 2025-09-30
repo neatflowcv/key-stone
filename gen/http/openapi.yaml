@@ -441,11 +441,11 @@ definitions:
                 $ref: '#/definitions/UserInput'
         example:
             user:
-                name: Dolores fuga asperiores voluptatem aspernatur eum.
                 password: Sapiente temporibus vel.
                 payload:
                     Dolorem delectus fugit.: Quia illum facere distinctio quam sunt.
                     Et rerum quia odit voluptas repudiandae.: Quo dolores.
+                username: Dolores fuga asperiores voluptatem aspernatur eum.
         required:
             - user
     UserDeleteUnauthorizedResponseBody:
@@ -495,10 +495,6 @@ definitions:
         title: UserInput
         type: object
         properties:
-            name:
-                type: string
-                description: The name of the user
-                example: Expedita soluta ex vel et.
             password:
                 type: string
                 description: The password of the user
@@ -510,11 +506,15 @@ definitions:
                     Suscipit non ad adipisci accusamus.: Praesentium dolore.
                     Tempora numquam nisi eaque.: Explicabo ipsum distinctio consequatur consectetur blanditiis repudiandae.
                 additionalProperties: true
+            username:
+                type: string
+                description: The name of the user
+                example: Expedita soluta ex vel et.
         example:
-            name: Iste voluptatem voluptatibus aspernatur.
             password: Odit in molestiae quos laborum illum.
             payload:
                 Doloribus qui est alias consequatur illum ducimus.: Assumenda dolor rerum fugit sed nemo.
+            username: Iste voluptatem voluptatibus aspernatur.
         required:
-            - name
+            - username
             - password

@@ -148,7 +148,7 @@ func EncodeDeleteError(encoder func(context.Context, http.ResponseWriter) goahtt
 // *user.UserInput from a value of type *UserInputRequestBody.
 func unmarshalUserInputRequestBodyToUserUserInput(v *UserInputRequestBody) *user.UserInput {
 	res := &user.UserInput{
-		Name:     *v.Name,
+		Username: *v.Username,
 		Password: *v.Password,
 	}
 	if v.Payload != nil {

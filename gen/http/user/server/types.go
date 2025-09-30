@@ -57,7 +57,7 @@ type DeleteUnauthorizedResponseBody struct {
 // UserInputRequestBody is used to define fields on request body types.
 type UserInputRequestBody struct {
 	// The name of the user
-	Name *string `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
+	Username *string `form:"username,omitempty" json:"username,omitempty" xml:"username,omitempty"`
 	// The password of the user
 	Password *string `form:"password,omitempty" json:"password,omitempty" xml:"password,omitempty"`
 	// The payload of the user
@@ -124,8 +124,8 @@ func ValidateCreateRequestBody(body *CreateRequestBody) (err error) {
 // ValidateUserInputRequestBody runs the validations defined on
 // UserInputRequestBody
 func ValidateUserInputRequestBody(body *UserInputRequestBody) (err error) {
-	if body.Name == nil {
-		err = goa.MergeErrors(err, goa.MissingFieldError("name", "body"))
+	if body.Username == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("username", "body"))
 	}
 	if body.Password == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("password", "body"))

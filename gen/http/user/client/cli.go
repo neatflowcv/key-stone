@@ -23,7 +23,7 @@ func BuildCreatePayload(userCreateBody string) (*user.CreatePayload, error) {
 	{
 		err = json.Unmarshal([]byte(userCreateBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"user\": {\n         \"name\": \"Dolores fuga asperiores voluptatem aspernatur eum.\",\n         \"password\": \"Sapiente temporibus vel.\",\n         \"payload\": {\n            \"Dolorem delectus fugit.\": \"Quia illum facere distinctio quam sunt.\",\n            \"Et rerum quia odit voluptas repudiandae.\": \"Quo dolores.\"\n         }\n      }\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"user\": {\n         \"password\": \"Sapiente temporibus vel.\",\n         \"payload\": {\n            \"Dolorem delectus fugit.\": \"Quia illum facere distinctio quam sunt.\",\n            \"Et rerum quia odit voluptas repudiandae.\": \"Quo dolores.\"\n         },\n         \"username\": \"Dolores fuga asperiores voluptatem aspernatur eum.\"\n      }\n   }'")
 		}
 		if body.User == nil {
 			err = goa.MergeErrors(err, goa.MissingFieldError("user", "body"))

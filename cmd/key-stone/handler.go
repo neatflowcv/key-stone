@@ -45,7 +45,7 @@ func (h *Handler) Issue(ctx context.Context, payload *token.IssuePayload) (*toke
 
 	now := time.Now()
 
-	return h.generate(now, user.Name)
+	return h.generate(now, user.Username)
 }
 
 func (h *Handler) Refresh(ctx context.Context, payload *token.RefreshPayload) (*token.TokenDetail, error) {
@@ -61,12 +61,12 @@ func (h *Handler) Refresh(ctx context.Context, payload *token.RefreshPayload) (*
 
 	now := time.Now()
 
-	return h.generate(now, user.Name)
+	return h.generate(now, user.Username)
 }
 
 func (h *Handler) Create(ctx context.Context, payload *user.CreatePayload) error {
 	log.Printf("payload %+v", payload)
-	h.users[payload.User.Name] = *payload.User
+	h.users[payload.User.Username] = *payload.User
 
 	return nil
 }
