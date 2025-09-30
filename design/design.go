@@ -25,6 +25,8 @@ var _ = Service("user", func() {
 	Method("create", func() {
 		Payload(func() {
 			Attribute("user", UserInput)
+
+			Required("user")
 		})
 
 		HTTP(func() {
@@ -59,6 +61,8 @@ var _ = Service("token", func() {
 	Method("issue", func() {
 		Payload(func() {
 			Attribute("user", IssueInput)
+
+			Required("user")
 		})
 
 		Result(TokenDetail)
@@ -75,6 +79,8 @@ var _ = Service("token", func() {
 	Method("refresh", func() {
 		Payload(func() {
 			Attribute("token", RefreshInput)
+
+			Required("token")
 		})
 
 		Result(TokenDetail)

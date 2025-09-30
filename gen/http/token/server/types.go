@@ -221,9 +221,7 @@ func NewRefreshUnauthorizedResponseBody(res *goa.ServiceError) *RefreshUnauthori
 // NewIssuePayload builds a token service issue endpoint payload.
 func NewIssuePayload(body *IssueRequestBody) *token.IssuePayload {
 	v := &token.IssuePayload{}
-	if body.User != nil {
-		v.User = unmarshalIssueInputRequestBodyToTokenIssueInput(body.User)
-	}
+	v.User = unmarshalIssueInputRequestBodyToTokenIssueInput(body.User)
 
 	return v
 }
@@ -231,15 +229,16 @@ func NewIssuePayload(body *IssueRequestBody) *token.IssuePayload {
 // NewRefreshPayload builds a token service refresh endpoint payload.
 func NewRefreshPayload(body *RefreshRequestBody) *token.RefreshPayload {
 	v := &token.RefreshPayload{}
-	if body.Token != nil {
-		v.Token = unmarshalRefreshInputRequestBodyToTokenRefreshInput(body.Token)
-	}
+	v.Token = unmarshalRefreshInputRequestBodyToTokenRefreshInput(body.Token)
 
 	return v
 }
 
 // ValidateIssueRequestBody runs the validations defined on IssueRequestBody
 func ValidateIssueRequestBody(body *IssueRequestBody) (err error) {
+	if body.User == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("user", "body"))
+	}
 	if body.User != nil {
 		if err2 := ValidateIssueInputRequestBody(body.User); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -250,6 +249,9 @@ func ValidateIssueRequestBody(body *IssueRequestBody) (err error) {
 
 // ValidateRefreshRequestBody runs the validations defined on RefreshRequestBody
 func ValidateRefreshRequestBody(body *RefreshRequestBody) (err error) {
+	if body.Token == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("token", "body"))
+	}
 	if body.Token != nil {
 		if err2 := ValidateRefreshInputRequestBody(body.Token); err2 != nil {
 			err = goa.MergeErrors(err, err2)

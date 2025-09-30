@@ -26,6 +26,8 @@ paths:
                   required: true
                   schema:
                     $ref: '#/definitions/TokenIssueRequestBody'
+                    required:
+                        - user
             responses:
                 "200":
                     description: OK response.
@@ -53,6 +55,8 @@ paths:
                   required: true
                   schema:
                     $ref: '#/definitions/TokenRefreshRequestBody'
+                    required:
+                        - token
             responses:
                 "200":
                     description: OK response.
@@ -80,6 +84,8 @@ paths:
                   required: true
                   schema:
                     $ref: '#/definitions/UserCreateRequestBody'
+                    required:
+                        - user
             responses:
                 "204":
                     description: No Content response.
@@ -226,6 +232,8 @@ definitions:
             user:
                 password: Nobis est sunt consectetur dolore et.
                 username: Fugiat quos.
+        required:
+            - user
     TokenIssueUnauthorizedResponseBody:
         title: 'Mediatype identifier: application/vnd.goa.error; view=default'
         type: object
@@ -322,6 +330,8 @@ definitions:
             token:
                 access_token: Reiciendis blanditiis porro qui unde maiores reprehenderit.
                 refresh_token: Qui in molestiae repellat voluptatem.
+        required:
+            - token
     TokenRefreshUnauthorizedResponseBody:
         title: 'Mediatype identifier: application/vnd.goa.error; view=default'
         type: object
@@ -421,6 +431,8 @@ definitions:
                 payload:
                     Dolorem delectus fugit.: Quia illum facere distinctio quam sunt.
                     Et rerum quia odit voluptas repudiandae.: Quo dolores.
+        required:
+            - user
     UserDeleteUnauthorizedResponseBody:
         title: 'Mediatype identifier: application/vnd.goa.error; view=default'
         type: object

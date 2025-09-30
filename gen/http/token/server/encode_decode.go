@@ -187,9 +187,6 @@ func EncodeRefreshError(encoder func(context.Context, http.ResponseWriter) goaht
 // unmarshalIssueInputRequestBodyToTokenIssueInput builds a value of type
 // *token.IssueInput from a value of type *IssueInputRequestBody.
 func unmarshalIssueInputRequestBodyToTokenIssueInput(v *IssueInputRequestBody) *token.IssueInput {
-	if v == nil {
-		return nil
-	}
 	res := &token.IssueInput{
 		Username: *v.Username,
 		Password: *v.Password,
@@ -201,9 +198,6 @@ func unmarshalIssueInputRequestBodyToTokenIssueInput(v *IssueInputRequestBody) *
 // unmarshalRefreshInputRequestBodyToTokenRefreshInput builds a value of type
 // *token.RefreshInput from a value of type *RefreshInputRequestBody.
 func unmarshalRefreshInputRequestBodyToTokenRefreshInput(v *RefreshInputRequestBody) *token.RefreshInput {
-	if v == nil {
-		return nil
-	}
 	res := &token.RefreshInput{
 		AccessToken:  *v.AccessToken,
 		RefreshToken: *v.RefreshToken,

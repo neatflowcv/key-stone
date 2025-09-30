@@ -144,6 +144,8 @@ components:
                     payload:
                         Dolorem delectus fugit.: Quia illum facere distinctio quam sunt.
                         Et rerum quia odit voluptas repudiandae.: Quo dolores.
+            required:
+                - user
         DeleteUserPayload:
             type: object
             properties:
@@ -223,6 +225,8 @@ components:
                 user:
                     password: Nobis est sunt consectetur dolore et.
                     username: Fugiat quos.
+            required:
+                - user
         RefreshInput:
             type: object
             properties:
@@ -249,6 +253,8 @@ components:
                 token:
                     access_token: Reiciendis blanditiis porro qui unde maiores reprehenderit.
                     refresh_token: Qui in molestiae repellat voluptatem.
+            required:
+                - token
         TokenDetail:
             type: object
             properties:

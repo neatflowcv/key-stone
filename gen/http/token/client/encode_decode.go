@@ -219,9 +219,6 @@ func DecodeRefreshResponse(decoder func(*http.Response) goahttp.Decoder, restore
 // marshalTokenIssueInputToIssueInputRequestBody builds a value of type
 // *IssueInputRequestBody from a value of type *token.IssueInput.
 func marshalTokenIssueInputToIssueInputRequestBody(v *token.IssueInput) *IssueInputRequestBody {
-	if v == nil {
-		return nil
-	}
 	res := &IssueInputRequestBody{
 		Username: v.Username,
 		Password: v.Password,
@@ -233,9 +230,6 @@ func marshalTokenIssueInputToIssueInputRequestBody(v *token.IssueInput) *IssueIn
 // marshalIssueInputRequestBodyToTokenIssueInput builds a value of type
 // *token.IssueInput from a value of type *IssueInputRequestBody.
 func marshalIssueInputRequestBodyToTokenIssueInput(v *IssueInputRequestBody) *token.IssueInput {
-	if v == nil {
-		return nil
-	}
 	res := &token.IssueInput{
 		Username: v.Username,
 		Password: v.Password,
@@ -247,9 +241,6 @@ func marshalIssueInputRequestBodyToTokenIssueInput(v *IssueInputRequestBody) *to
 // marshalTokenRefreshInputToRefreshInputRequestBody builds a value of type
 // *RefreshInputRequestBody from a value of type *token.RefreshInput.
 func marshalTokenRefreshInputToRefreshInputRequestBody(v *token.RefreshInput) *RefreshInputRequestBody {
-	if v == nil {
-		return nil
-	}
 	res := &RefreshInputRequestBody{
 		AccessToken:  v.AccessToken,
 		RefreshToken: v.RefreshToken,
@@ -261,9 +252,6 @@ func marshalTokenRefreshInputToRefreshInputRequestBody(v *token.RefreshInput) *R
 // marshalRefreshInputRequestBodyToTokenRefreshInput builds a value of type
 // *token.RefreshInput from a value of type *RefreshInputRequestBody.
 func marshalRefreshInputRequestBodyToTokenRefreshInput(v *RefreshInputRequestBody) *token.RefreshInput {
-	if v == nil {
-		return nil
-	}
 	res := &token.RefreshInput{
 		AccessToken:  v.AccessToken,
 		RefreshToken: v.RefreshToken,

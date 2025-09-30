@@ -15,13 +15,13 @@ import (
 // IssueRequestBody is the type of the "token" service "issue" endpoint HTTP
 // request body.
 type IssueRequestBody struct {
-	User *IssueInputRequestBody `form:"user,omitempty" json:"user,omitempty" xml:"user,omitempty"`
+	User *IssueInputRequestBody `form:"user" json:"user" xml:"user"`
 }
 
 // RefreshRequestBody is the type of the "token" service "refresh" endpoint
 // HTTP request body.
 type RefreshRequestBody struct {
-	Token *RefreshInputRequestBody `form:"token,omitempty" json:"token,omitempty" xml:"token,omitempty"`
+	Token *RefreshInputRequestBody `form:"token" json:"token" xml:"token"`
 }
 
 // IssueResponseBody is the type of the "token" service "issue" endpoint HTTP

@@ -15,7 +15,7 @@ import (
 // CreateRequestBody is the type of the "user" service "create" endpoint HTTP
 // request body.
 type CreateRequestBody struct {
-	User *UserInputRequestBody `form:"user,omitempty" json:"user,omitempty" xml:"user,omitempty"`
+	User *UserInputRequestBody `form:"user" json:"user" xml:"user"`
 }
 
 // CreateBadRequestResponseBody is the type of the "user" service "create"

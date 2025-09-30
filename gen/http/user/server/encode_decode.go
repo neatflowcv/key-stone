@@ -147,9 +147,6 @@ func EncodeDeleteError(encoder func(context.Context, http.ResponseWriter) goahtt
 // unmarshalUserInputRequestBodyToUserUserInput builds a value of type
 // *user.UserInput from a value of type *UserInputRequestBody.
 func unmarshalUserInputRequestBodyToUserUserInput(v *UserInputRequestBody) *user.UserInput {
-	if v == nil {
-		return nil
-	}
 	res := &user.UserInput{
 		Name:     *v.Name,
 		Password: *v.Password,

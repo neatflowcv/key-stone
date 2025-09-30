@@ -95,9 +95,7 @@ func NewDeleteUnauthorizedResponseBody(res *goa.ServiceError) *DeleteUnauthorize
 // NewCreatePayload builds a user service create endpoint payload.
 func NewCreatePayload(body *CreateRequestBody) *user.CreatePayload {
 	v := &user.CreatePayload{}
-	if body.User != nil {
-		v.User = unmarshalUserInputRequestBodyToUserUserInput(body.User)
-	}
+	v.User = unmarshalUserInputRequestBodyToUserUserInput(body.User)
 
 	return v
 }
@@ -112,6 +110,9 @@ func NewDeleteUserPayload(authorization string) *user.DeleteUserPayload {
 
 // ValidateCreateRequestBody runs the validations defined on CreateRequestBody
 func ValidateCreateRequestBody(body *CreateRequestBody) (err error) {
+	if body.User == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("user", "body"))
+	}
 	if body.User != nil {
 		if err2 := ValidateUserInputRequestBody(body.User); err2 != nil {
 			err = goa.MergeErrors(err, err2)

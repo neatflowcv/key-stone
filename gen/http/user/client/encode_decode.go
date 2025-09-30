@@ -171,9 +171,6 @@ func DecodeDeleteResponse(decoder func(*http.Response) goahttp.Decoder, restoreB
 // marshalUserUserInputToUserInputRequestBody builds a value of type
 // *UserInputRequestBody from a value of type *user.UserInput.
 func marshalUserUserInputToUserInputRequestBody(v *user.UserInput) *UserInputRequestBody {
-	if v == nil {
-		return nil
-	}
 	res := &UserInputRequestBody{
 		Name:     v.Name,
 		Password: v.Password,
@@ -193,9 +190,6 @@ func marshalUserUserInputToUserInputRequestBody(v *user.UserInput) *UserInputReq
 // marshalUserInputRequestBodyToUserUserInput builds a value of type
 // *user.UserInput from a value of type *UserInputRequestBody.
 func marshalUserInputRequestBodyToUserUserInput(v *UserInputRequestBody) *user.UserInput {
-	if v == nil {
-		return nil
-	}
 	res := &user.UserInput{
 		Name:     v.Name,
 		Password: v.Password,
