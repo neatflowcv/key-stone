@@ -12,16 +12,15 @@ var _ = API("key-stone", func() {
 	HTTP(func() {
 		Path("/key-stone")
 	})
-
-	Error("BadRequest", String, "Bad Request")
-	Error("InternalServerError", String, "Internal Server Error")
-	Error("Unauthorized", String, "Unauthorized")
 })
 
 var _ = Service("user", func() {
 	HTTP(func() {
 		Path("/users")
 	})
+
+	Error("BadRequest", ErrorResult, "Bad Request")
+	Error("Unauthorized", ErrorResult, "Unauthorized")
 
 	Method("create", func() {
 		Payload(func() {
@@ -33,7 +32,6 @@ var _ = Service("user", func() {
 
 			Response(StatusNoContent)
 			Response("BadRequest", StatusBadRequest)
-			Response("InternalServerError", StatusInternalServerError)
 		})
 	})
 	Method("delete", func() {
@@ -46,7 +44,6 @@ var _ = Service("user", func() {
 
 			Response(StatusNoContent)
 			Response("Unauthorized", StatusUnauthorized)
-			Response("InternalServerError", StatusInternalServerError)
 		})
 	})
 })
@@ -55,6 +52,9 @@ var _ = Service("token", func() {
 	HTTP(func() {
 		Path("/auth")
 	})
+
+	Error("BadRequest", ErrorResult, "Bad Request")
+	Error("Unauthorized", ErrorResult, "Unauthorized")
 
 	Method("issue", func() {
 		Payload(func() {
@@ -69,7 +69,6 @@ var _ = Service("token", func() {
 			Response(StatusOK)
 			Response("BadRequest", StatusBadRequest)
 			Response("Unauthorized", StatusUnauthorized)
-			Response("InternalServerError", StatusInternalServerError)
 		})
 	})
 
@@ -86,10 +85,8 @@ var _ = Service("token", func() {
 			Response(StatusOK)
 			Response("BadRequest", StatusBadRequest)
 			Response("Unauthorized", StatusUnauthorized)
-			Response("InternalServerError", StatusInternalServerError)
 		})
 	})
-
 })
 
 var UserInput = Type("UserInput", func() { //nolint:gochecknoglobals
