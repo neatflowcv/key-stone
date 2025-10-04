@@ -9,7 +9,7 @@ import (
 
 	"github.com/neatflowcv/key-stone/gen/token"
 	"github.com/neatflowcv/key-stone/gen/user"
-	"github.com/neatflowcv/key-stone/internal/pkg/vault"
+	"github.com/neatflowcv/key-stone/pkg/vault"
 )
 
 var _ user.Service = (*Handler)(nil)
