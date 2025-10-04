@@ -37,7 +37,7 @@ func (e *Endpoints) Use(m func(goa.Endpoint) goa.Endpoint) {
 // "create" of service "user".
 func NewCreateEndpoint(s Service) goa.Endpoint {
 	return func(ctx context.Context, req any) (any, error) {
-		p := req.(*CreatePayload)
+		p := req.(*UserInput)
 		return nil, s.Create(ctx, p)
 	}
 }

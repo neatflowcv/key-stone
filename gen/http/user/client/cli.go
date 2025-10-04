@@ -12,29 +12,22 @@ import (
 	"fmt"
 
 	user "github.com/neatflowcv/key-stone/gen/user"
-	goa "goa.design/goa/v3/pkg"
 )
 
 // BuildCreatePayload builds the payload for the user create endpoint from CLI
 // flags.
-func BuildCreatePayload(userCreateBody string) (*user.CreatePayload, error) {
+func BuildCreatePayload(userCreateBody string) (*user.UserInput, error) {
 	var err error
 	var body CreateRequestBody
 	{
 		err = json.Unmarshal([]byte(userCreateBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"user\": {\n         \"password\": \"Occaecati vel adipisci.\",\n         \"username\": \"Quia architecto veritatis deleniti ea perferendis.\"\n      }\n   }'")
-		}
-		if body.User == nil {
-			err = goa.MergeErrors(err, goa.MissingFieldError("user", "body"))
-		}
-		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"password\": \"Occaecati vel adipisci.\",\n      \"username\": \"Quia architecto veritatis deleniti ea perferendis.\"\n   }'")
 		}
 	}
-	v := &user.CreatePayload{}
-	if body.User != nil {
-		v.User = marshalUserInputRequestBodyToUserUserInput(body.User)
+	v := &user.UserInput{
+		Username: body.Username,
+		Password: body.Password,
 	}
 
 	return v, nil

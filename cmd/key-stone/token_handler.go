@@ -22,10 +22,10 @@ func NewTokenHandler(
 	}
 }
 
-func (h *TokenHandler) Issue(ctx context.Context, payload *token.IssuePayload) (*token.TokenDetail, error) {
+func (h *TokenHandler) Issue(ctx context.Context, payload *token.IssueInput) (*token.TokenDetail, error) {
 	tokenSet, err := h.service.CreateToken(ctx, &flow.Credential{
-		Username: payload.User.Username,
-		Password: payload.User.Password,
+		Username: payload.Username,
+		Password: payload.Password,
 	})
 	if err != nil {
 		switch {
@@ -46,10 +46,10 @@ func (h *TokenHandler) Issue(ctx context.Context, payload *token.IssuePayload) (
 	}, nil
 }
 
-func (h *TokenHandler) Refresh(ctx context.Context, payload *token.RefreshPayload) (*token.TokenDetail, error) {
+func (h *TokenHandler) Refresh(ctx context.Context, payload *token.RefreshInput) (*token.TokenDetail, error) {
 	tokenSet, err := h.service.RefreshToken(ctx, &flow.TokenSetInput{
-		AccessToken:  payload.Token.AccessToken,
-		RefreshToken: payload.Token.RefreshToken,
+		AccessToken:  payload.AccessToken,
+		RefreshToken: payload.RefreshToken,
 	})
 	if err != nil {
 		switch {

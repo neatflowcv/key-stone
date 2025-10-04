@@ -15,13 +15,19 @@ import (
 // IssueRequestBody is the type of the "token" service "issue" endpoint HTTP
 // request body.
 type IssueRequestBody struct {
-	User *IssueInputRequestBody `form:"user,omitempty" json:"user,omitempty" xml:"user,omitempty"`
+	// The username of the user
+	Username *string `form:"username,omitempty" json:"username,omitempty" xml:"username,omitempty"`
+	// The password of the user
+	Password *string `form:"password,omitempty" json:"password,omitempty" xml:"password,omitempty"`
 }
 
 // RefreshRequestBody is the type of the "token" service "refresh" endpoint
 // HTTP request body.
 type RefreshRequestBody struct {
-	Token *RefreshInputRequestBody `form:"token,omitempty" json:"token,omitempty" xml:"token,omitempty"`
+	// The access token of the user
+	AccessToken *string `form:"access_token,omitempty" json:"access_token,omitempty" xml:"access_token,omitempty"`
+	// The refresh token of the user
+	RefreshToken *string `form:"refresh_token,omitempty" json:"refresh_token,omitempty" xml:"refresh_token,omitempty"`
 }
 
 // IssueResponseBody is the type of the "token" service "issue" endpoint HTTP
@@ -104,22 +110,6 @@ type RefreshInternalServerErrorResponseBody struct {
 	Fault bool `form:"fault" json:"fault" xml:"fault"`
 }
 
-// IssueInputRequestBody is used to define fields on request body types.
-type IssueInputRequestBody struct {
-	// The username of the user
-	Username *string `form:"username,omitempty" json:"username,omitempty" xml:"username,omitempty"`
-	// The password of the user
-	Password *string `form:"password,omitempty" json:"password,omitempty" xml:"password,omitempty"`
-}
-
-// RefreshInputRequestBody is used to define fields on request body types.
-type RefreshInputRequestBody struct {
-	// The access token of the user
-	AccessToken *string `form:"access_token,omitempty" json:"access_token,omitempty" xml:"access_token,omitempty"`
-	// The refresh token of the user
-	RefreshToken *string `form:"refresh_token,omitempty" json:"refresh_token,omitempty" xml:"refresh_token,omitempty"`
-}
-
 // NewIssueResponseBody builds the HTTP response body from the result of the
 // "issue" endpoint of the "token" service.
 func NewIssueResponseBody(res *token.TokenDetail) *IssueResponseBody {
@@ -186,51 +176,28 @@ func NewRefreshInternalServerErrorResponseBody(res *goa.ServiceError) *RefreshIn
 	return body
 }
 
-// NewIssuePayload builds a token service issue endpoint payload.
-func NewIssuePayload(body *IssueRequestBody) *token.IssuePayload {
-	v := &token.IssuePayload{}
-	v.User = unmarshalIssueInputRequestBodyToTokenIssueInput(body.User)
+// NewIssueInput builds a token service issue endpoint payload.
+func NewIssueInput(body *IssueRequestBody) *token.IssueInput {
+	v := &token.IssueInput{
+		Username: *body.Username,
+		Password: *body.Password,
+	}
 
 	return v
 }
 
-// NewRefreshPayload builds a token service refresh endpoint payload.
-func NewRefreshPayload(body *RefreshRequestBody) *token.RefreshPayload {
-	v := &token.RefreshPayload{}
-	v.Token = unmarshalRefreshInputRequestBodyToTokenRefreshInput(body.Token)
+// NewRefreshInput builds a token service refresh endpoint payload.
+func NewRefreshInput(body *RefreshRequestBody) *token.RefreshInput {
+	v := &token.RefreshInput{
+		AccessToken:  *body.AccessToken,
+		RefreshToken: *body.RefreshToken,
+	}
 
 	return v
 }
 
 // ValidateIssueRequestBody runs the validations defined on IssueRequestBody
 func ValidateIssueRequestBody(body *IssueRequestBody) (err error) {
-	if body.User == nil {
-		err = goa.MergeErrors(err, goa.MissingFieldError("user", "body"))
-	}
-	if body.User != nil {
-		if err2 := ValidateIssueInputRequestBody(body.User); err2 != nil {
-			err = goa.MergeErrors(err, err2)
-		}
-	}
-	return
-}
-
-// ValidateRefreshRequestBody runs the validations defined on RefreshRequestBody
-func ValidateRefreshRequestBody(body *RefreshRequestBody) (err error) {
-	if body.Token == nil {
-		err = goa.MergeErrors(err, goa.MissingFieldError("token", "body"))
-	}
-	if body.Token != nil {
-		if err2 := ValidateRefreshInputRequestBody(body.Token); err2 != nil {
-			err = goa.MergeErrors(err, err2)
-		}
-	}
-	return
-}
-
-// ValidateIssueInputRequestBody runs the validations defined on
-// IssueInputRequestBody
-func ValidateIssueInputRequestBody(body *IssueInputRequestBody) (err error) {
 	if body.Username == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("username", "body"))
 	}
@@ -240,9 +207,8 @@ func ValidateIssueInputRequestBody(body *IssueInputRequestBody) (err error) {
 	return
 }
 
-// ValidateRefreshInputRequestBody runs the validations defined on
-// RefreshInputRequestBody
-func ValidateRefreshInputRequestBody(body *RefreshInputRequestBody) (err error) {
+// ValidateRefreshRequestBody runs the validations defined on RefreshRequestBody
+func ValidateRefreshRequestBody(body *RefreshRequestBody) (err error) {
 	if body.AccessToken == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("access_token", "body"))
 	}

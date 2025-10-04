@@ -25,9 +25,10 @@ paths:
                   in: body
                   required: true
                   schema:
-                    $ref: '#/definitions/TokenIssueRequestBody'
+                    $ref: '#/definitions/IssueInput'
                     required:
-                        - user
+                        - username
+                        - password
             responses:
                 "200":
                     description: OK response.
@@ -55,9 +56,10 @@ paths:
                   in: body
                   required: true
                   schema:
-                    $ref: '#/definitions/TokenRefreshRequestBody'
+                    $ref: '#/definitions/RefreshInput'
                     required:
-                        - token
+                        - access_token
+                        - refresh_token
             responses:
                 "200":
                     description: OK response.
@@ -89,9 +91,10 @@ paths:
                   in: body
                   required: true
                   schema:
-                    $ref: '#/definitions/UserCreateRequestBody'
+                    $ref: '#/definitions/UserInput'
                     required:
-                        - user
+                        - username
+                        - password
             responses:
                 "204":
                     description: No Content response.
@@ -198,18 +201,6 @@ definitions:
             - token_type
             - expires_in
             - refresh_token
-    TokenIssueRequestBody:
-        title: TokenIssueRequestBody
-        type: object
-        properties:
-            user:
-                $ref: '#/definitions/IssueInput'
-        example:
-            user:
-                password: Illo et rerum quia odit voluptas.
-                username: Esse sapiente temporibus vel.
-        required:
-            - user
     TokenIssueUnauthorizedResponseBody:
         title: 'Mediatype identifier: application/vnd.goa.error; view=default'
         type: object
@@ -296,18 +287,6 @@ definitions:
             - temporary
             - timeout
             - fault
-    TokenRefreshRequestBody:
-        title: TokenRefreshRequestBody
-        type: object
-        properties:
-            token:
-                $ref: '#/definitions/RefreshInput'
-        example:
-            token:
-                access_token: Laboriosam exercitationem.
-                refresh_token: Voluptatem sit culpa.
-        required:
-            - token
     TokenRefreshUnauthorizedResponseBody:
         title: 'Mediatype identifier: application/vnd.goa.error; view=default'
         type: object
@@ -394,18 +373,6 @@ definitions:
             - temporary
             - timeout
             - fault
-    UserCreateRequestBody:
-        title: UserCreateRequestBody
-        type: object
-        properties:
-            user:
-                $ref: '#/definitions/UserInput'
-        example:
-            user:
-                password: Occaecati vel adipisci.
-                username: Quia architecto veritatis deleniti ea perferendis.
-        required:
-            - user
     UserCreateUserAlreadyExistsResponseBody:
         title: 'Mediatype identifier: application/vnd.goa.error; view=default'
         type: object

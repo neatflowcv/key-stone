@@ -29,8 +29,8 @@ func EncodeCreateResponse(encoder func(context.Context, http.ResponseWriter) goa
 
 // DecodeCreateRequest returns a decoder for requests sent to the user create
 // endpoint.
-func DecodeCreateRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (*user.CreatePayload, error) {
-	return func(r *http.Request) (*user.CreatePayload, error) {
+func DecodeCreateRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (*user.UserInput, error) {
+	return func(r *http.Request) (*user.UserInput, error) {
 		var (
 			body CreateRequestBody
 			err  error
@@ -50,7 +50,7 @@ func DecodeCreateRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.
 		if err != nil {
 			return nil, err
 		}
-		payload := NewCreatePayload(&body)
+		payload := NewCreateUserInput(&body)
 
 		return payload, nil
 	}
@@ -168,15 +168,4 @@ func EncodeDeleteError(encoder func(context.Context, http.ResponseWriter) goahtt
 			return encodeError(ctx, w, v)
 		}
 	}
-}
-
-// unmarshalUserInputRequestBodyToUserUserInput builds a value of type
-// *user.UserInput from a value of type *UserInputRequestBody.
-func unmarshalUserInputRequestBodyToUserUserInput(v *UserInputRequestBody) *user.UserInput {
-	res := &user.UserInput{
-		Username: *v.Username,
-		Password: *v.Password,
-	}
-
-	return res
 }

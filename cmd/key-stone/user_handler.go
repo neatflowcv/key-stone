@@ -23,10 +23,10 @@ func NewUserHandler(
 	}
 }
 
-func (h *UserHandler) Create(ctx context.Context, payload *user.CreatePayload) error {
+func (h *UserHandler) Create(ctx context.Context, payload *user.UserInput) error {
 	err := h.service.CreateUser(ctx, &flow.Credential{
-		Username: payload.User.Username,
-		Password: payload.User.Password,
+		Username: payload.Username,
+		Password: payload.Password,
 	})
 	if err != nil {
 		switch {

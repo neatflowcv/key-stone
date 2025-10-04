@@ -37,9 +37,9 @@ func (c *Client) BuildIssueRequest(ctx context.Context, v any) (*http.Request, e
 // server.
 func EncodeIssueRequest(encoder func(*http.Request) goahttp.Encoder) func(*http.Request, any) error {
 	return func(req *http.Request, v any) error {
-		p, ok := v.(*token.IssuePayload)
+		p, ok := v.(*token.IssueInput)
 		if !ok {
-			return goahttp.ErrInvalidType("token", "issue", "*token.IssuePayload", v)
+			return goahttp.ErrInvalidType("token", "issue", "*token.IssueInput", v)
 		}
 		body := NewIssueRequestBody(p)
 		if err := encoder(req).Encode(&body); err != nil {
@@ -125,9 +125,9 @@ func (c *Client) BuildRefreshRequest(ctx context.Context, v any) (*http.Request,
 // refresh server.
 func EncodeRefreshRequest(encoder func(*http.Request) goahttp.Encoder) func(*http.Request, any) error {
 	return func(req *http.Request, v any) error {
-		p, ok := v.(*token.RefreshPayload)
+		p, ok := v.(*token.RefreshInput)
 		if !ok {
-			return goahttp.ErrInvalidType("token", "refresh", "*token.RefreshPayload", v)
+			return goahttp.ErrInvalidType("token", "refresh", "*token.RefreshInput", v)
 		}
 		body := NewRefreshRequestBody(p)
 		if err := encoder(req).Encode(&body); err != nil {
@@ -207,48 +207,4 @@ func DecodeRefreshResponse(decoder func(*http.Response) goahttp.Decoder, restore
 			return nil, goahttp.ErrInvalidResponse("token", "refresh", resp.StatusCode, string(body))
 		}
 	}
-}
-
-// marshalTokenIssueInputToIssueInputRequestBody builds a value of type
-// *IssueInputRequestBody from a value of type *token.IssueInput.
-func marshalTokenIssueInputToIssueInputRequestBody(v *token.IssueInput) *IssueInputRequestBody {
-	res := &IssueInputRequestBody{
-		Username: v.Username,
-		Password: v.Password,
-	}
-
-	return res
-}
-
-// marshalIssueInputRequestBodyToTokenIssueInput builds a value of type
-// *token.IssueInput from a value of type *IssueInputRequestBody.
-func marshalIssueInputRequestBodyToTokenIssueInput(v *IssueInputRequestBody) *token.IssueInput {
-	res := &token.IssueInput{
-		Username: v.Username,
-		Password: v.Password,
-	}
-
-	return res
-}
-
-// marshalTokenRefreshInputToRefreshInputRequestBody builds a value of type
-// *RefreshInputRequestBody from a value of type *token.RefreshInput.
-func marshalTokenRefreshInputToRefreshInputRequestBody(v *token.RefreshInput) *RefreshInputRequestBody {
-	res := &RefreshInputRequestBody{
-		AccessToken:  v.AccessToken,
-		RefreshToken: v.RefreshToken,
-	}
-
-	return res
-}
-
-// marshalRefreshInputRequestBodyToTokenRefreshInput builds a value of type
-// *token.RefreshInput from a value of type *RefreshInputRequestBody.
-func marshalRefreshInputRequestBodyToTokenRefreshInput(v *RefreshInputRequestBody) *token.RefreshInput {
-	res := &token.RefreshInput{
-		AccessToken:  v.AccessToken,
-		RefreshToken: v.RefreshToken,
-	}
-
-	return res
 }

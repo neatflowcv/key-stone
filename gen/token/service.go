@@ -16,9 +16,9 @@ import (
 // Service is the token service interface.
 type Service interface {
 	// Issue implements issue.
-	Issue(context.Context, *IssuePayload) (res *TokenDetail, err error)
+	Issue(context.Context, *IssueInput) (res *TokenDetail, err error)
 	// Refresh implements refresh.
-	Refresh(context.Context, *RefreshPayload) (res *TokenDetail, err error)
+	Refresh(context.Context, *RefreshInput) (res *TokenDetail, err error)
 }
 
 // APIName is the name of the API as defined in the design.
@@ -37,6 +37,7 @@ const ServiceName = "token"
 // MethodKey key.
 var MethodNames = [2]string{"issue", "refresh"}
 
+// IssueInput is the payload type of the token service issue method.
 type IssueInput struct {
 	// The username of the user
 	Username string
@@ -44,21 +45,12 @@ type IssueInput struct {
 	Password string
 }
 
-// IssuePayload is the payload type of the token service issue method.
-type IssuePayload struct {
-	User *IssueInput
-}
-
+// RefreshInput is the payload type of the token service refresh method.
 type RefreshInput struct {
 	// The access token of the user
 	AccessToken string
 	// The refresh token of the user
 	RefreshToken string
-}
-
-// RefreshPayload is the payload type of the token service refresh method.
-type RefreshPayload struct {
-	Token *RefreshInput
 }
 
 // TokenDetail is the result type of the token service issue method.

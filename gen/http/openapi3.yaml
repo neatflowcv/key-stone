@@ -18,11 +18,10 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/CreateRequestBody'
+                            $ref: '#/components/schemas/IssueInput'
                         example:
-                            user:
-                                password: Illo et rerum quia odit voluptas.
-                                username: Esse sapiente temporibus vel.
+                            password: Illo et rerum quia odit voluptas.
+                            username: Esse sapiente temporibus vel.
             responses:
                 "200":
                     description: OK response.
@@ -52,11 +51,10 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/RefreshRequestBody'
+                            $ref: '#/components/schemas/RefreshInput'
                         example:
-                            token:
-                                access_token: Laboriosam exercitationem.
-                                refresh_token: Voluptatem sit culpa.
+                            access_token: Laboriosam exercitationem.
+                            refresh_token: Voluptatem sit culpa.
             responses:
                 "200":
                     description: OK response.
@@ -92,11 +90,10 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/CreateRequestBody'
+                            $ref: '#/components/schemas/UserInput'
                         example:
-                            user:
-                                password: Occaecati vel adipisci.
-                                username: Quia architecto veritatis deleniti ea perferendis.
+                            password: Occaecati vel adipisci.
+                            username: Quia architecto veritatis deleniti ea perferendis.
             responses:
                 "204":
                     description: No Content response.
@@ -135,17 +132,6 @@ paths:
                                 $ref: '#/components/schemas/Error'
 components:
     schemas:
-        CreateRequestBody:
-            type: object
-            properties:
-                user:
-                    $ref: '#/components/schemas/UserInput'
-            example:
-                user:
-                    password: Occaecati vel adipisci.
-                    username: Quia architecto veritatis deleniti ea perferendis.
-            required:
-                - user
         DeleteUserPayload:
             type: object
             properties:
@@ -233,17 +219,6 @@ components:
             required:
                 - access_token
                 - refresh_token
-        RefreshRequestBody:
-            type: object
-            properties:
-                token:
-                    $ref: '#/components/schemas/RefreshInput'
-            example:
-                token:
-                    access_token: Laboriosam exercitationem.
-                    refresh_token: Voluptatem sit culpa.
-            required:
-                - token
         TokenDetail:
             type: object
             properties:

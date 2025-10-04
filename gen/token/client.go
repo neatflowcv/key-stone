@@ -32,7 +32,7 @@ func NewClient(issue, refresh goa.Endpoint) *Client {
 //   - "Unauthorized" (type *goa.ServiceError): Unauthorized
 //   - "InternalServerError" (type *goa.ServiceError): Internal Server Error
 //   - error: internal error
-func (c *Client) Issue(ctx context.Context, p *IssuePayload) (res *TokenDetail, err error) {
+func (c *Client) Issue(ctx context.Context, p *IssueInput) (res *TokenDetail, err error) {
 	var ires any
 	ires, err = c.IssueEndpoint(ctx, p)
 	if err != nil {
@@ -46,7 +46,7 @@ func (c *Client) Issue(ctx context.Context, p *IssuePayload) (res *TokenDetail, 
 //   - "Unauthorized" (type *goa.ServiceError): Unauthorized
 //   - "InternalServerError" (type *goa.ServiceError): Internal Server Error
 //   - error: internal error
-func (c *Client) Refresh(ctx context.Context, p *RefreshPayload) (res *TokenDetail, err error) {
+func (c *Client) Refresh(ctx context.Context, p *RefreshInput) (res *TokenDetail, err error) {
 	var ires any
 	ires, err = c.RefreshEndpoint(ctx, p)
 	if err != nil {

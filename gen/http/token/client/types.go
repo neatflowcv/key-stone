@@ -15,13 +15,19 @@ import (
 // IssueRequestBody is the type of the "token" service "issue" endpoint HTTP
 // request body.
 type IssueRequestBody struct {
-	User *IssueInputRequestBody `form:"user" json:"user" xml:"user"`
+	// The username of the user
+	Username string `form:"username" json:"username" xml:"username"`
+	// The password of the user
+	Password string `form:"password" json:"password" xml:"password"`
 }
 
 // RefreshRequestBody is the type of the "token" service "refresh" endpoint
 // HTTP request body.
 type RefreshRequestBody struct {
-	Token *RefreshInputRequestBody `form:"token" json:"token" xml:"token"`
+	// The access token of the user
+	AccessToken string `form:"access_token" json:"access_token" xml:"access_token"`
+	// The refresh token of the user
+	RefreshToken string `form:"refresh_token" json:"refresh_token" xml:"refresh_token"`
 }
 
 // IssueResponseBody is the type of the "token" service "issue" endpoint HTTP
@@ -104,38 +110,22 @@ type RefreshInternalServerErrorResponseBody struct {
 	Fault *bool `form:"fault,omitempty" json:"fault,omitempty" xml:"fault,omitempty"`
 }
 
-// IssueInputRequestBody is used to define fields on request body types.
-type IssueInputRequestBody struct {
-	// The username of the user
-	Username string `form:"username" json:"username" xml:"username"`
-	// The password of the user
-	Password string `form:"password" json:"password" xml:"password"`
-}
-
-// RefreshInputRequestBody is used to define fields on request body types.
-type RefreshInputRequestBody struct {
-	// The access token of the user
-	AccessToken string `form:"access_token" json:"access_token" xml:"access_token"`
-	// The refresh token of the user
-	RefreshToken string `form:"refresh_token" json:"refresh_token" xml:"refresh_token"`
-}
-
 // NewIssueRequestBody builds the HTTP request body from the payload of the
 // "issue" endpoint of the "token" service.
-func NewIssueRequestBody(p *token.IssuePayload) *IssueRequestBody {
-	body := &IssueRequestBody{}
-	if p.User != nil {
-		body.User = marshalTokenIssueInputToIssueInputRequestBody(p.User)
+func NewIssueRequestBody(p *token.IssueInput) *IssueRequestBody {
+	body := &IssueRequestBody{
+		Username: p.Username,
+		Password: p.Password,
 	}
 	return body
 }
 
 // NewRefreshRequestBody builds the HTTP request body from the payload of the
 // "refresh" endpoint of the "token" service.
-func NewRefreshRequestBody(p *token.RefreshPayload) *RefreshRequestBody {
-	body := &RefreshRequestBody{}
-	if p.Token != nil {
-		body.Token = marshalTokenRefreshInputToRefreshInputRequestBody(p.Token)
+func NewRefreshRequestBody(p *token.RefreshInput) *RefreshRequestBody {
+	body := &RefreshRequestBody{
+		AccessToken:  p.AccessToken,
+		RefreshToken: p.RefreshToken,
 	}
 	return body
 }

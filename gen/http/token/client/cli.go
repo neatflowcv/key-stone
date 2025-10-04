@@ -12,29 +12,22 @@ import (
 	"fmt"
 
 	token "github.com/neatflowcv/key-stone/gen/token"
-	goa "goa.design/goa/v3/pkg"
 )
 
 // BuildIssuePayload builds the payload for the token issue endpoint from CLI
 // flags.
-func BuildIssuePayload(tokenIssueBody string) (*token.IssuePayload, error) {
+func BuildIssuePayload(tokenIssueBody string) (*token.IssueInput, error) {
 	var err error
 	var body IssueRequestBody
 	{
 		err = json.Unmarshal([]byte(tokenIssueBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"user\": {\n         \"password\": \"Illo et rerum quia odit voluptas.\",\n         \"username\": \"Esse sapiente temporibus vel.\"\n      }\n   }'")
-		}
-		if body.User == nil {
-			err = goa.MergeErrors(err, goa.MissingFieldError("user", "body"))
-		}
-		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"password\": \"Illo et rerum quia odit voluptas.\",\n      \"username\": \"Esse sapiente temporibus vel.\"\n   }'")
 		}
 	}
-	v := &token.IssuePayload{}
-	if body.User != nil {
-		v.User = marshalIssueInputRequestBodyToTokenIssueInput(body.User)
+	v := &token.IssueInput{
+		Username: body.Username,
+		Password: body.Password,
 	}
 
 	return v, nil
@@ -42,24 +35,18 @@ func BuildIssuePayload(tokenIssueBody string) (*token.IssuePayload, error) {
 
 // BuildRefreshPayload builds the payload for the token refresh endpoint from
 // CLI flags.
-func BuildRefreshPayload(tokenRefreshBody string) (*token.RefreshPayload, error) {
+func BuildRefreshPayload(tokenRefreshBody string) (*token.RefreshInput, error) {
 	var err error
 	var body RefreshRequestBody
 	{
 		err = json.Unmarshal([]byte(tokenRefreshBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"token\": {\n         \"access_token\": \"Laboriosam exercitationem.\",\n         \"refresh_token\": \"Voluptatem sit culpa.\"\n      }\n   }'")
-		}
-		if body.Token == nil {
-			err = goa.MergeErrors(err, goa.MissingFieldError("token", "body"))
-		}
-		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"access_token\": \"Laboriosam exercitationem.\",\n      \"refresh_token\": \"Voluptatem sit culpa.\"\n   }'")
 		}
 	}
-	v := &token.RefreshPayload{}
-	if body.Token != nil {
-		v.Token = marshalRefreshInputRequestBodyToTokenRefreshInput(body.Token)
+	v := &token.RefreshInput{
+		AccessToken:  body.AccessToken,
+		RefreshToken: body.RefreshToken,
 	}
 
 	return v, nil

@@ -15,7 +15,10 @@ import (
 // CreateRequestBody is the type of the "user" service "create" endpoint HTTP
 // request body.
 type CreateRequestBody struct {
-	User *UserInputRequestBody `form:"user,omitempty" json:"user,omitempty" xml:"user,omitempty"`
+	// The name of the user
+	Username *string `form:"username,omitempty" json:"username,omitempty" xml:"username,omitempty"`
+	// The password of the user
+	Password *string `form:"password,omitempty" json:"password,omitempty" xml:"password,omitempty"`
 }
 
 // CreateUserAlreadyExistsResponseBody is the type of the "user" service
@@ -90,14 +93,6 @@ type DeleteInternalServerErrorResponseBody struct {
 	Fault bool `form:"fault" json:"fault" xml:"fault"`
 }
 
-// UserInputRequestBody is used to define fields on request body types.
-type UserInputRequestBody struct {
-	// The name of the user
-	Username *string `form:"username,omitempty" json:"username,omitempty" xml:"username,omitempty"`
-	// The password of the user
-	Password *string `form:"password,omitempty" json:"password,omitempty" xml:"password,omitempty"`
-}
-
 // NewCreateUserAlreadyExistsResponseBody builds the HTTP response body from
 // the result of the "create" endpoint of the "user" service.
 func NewCreateUserAlreadyExistsResponseBody(res *goa.ServiceError) *CreateUserAlreadyExistsResponseBody {
@@ -154,10 +149,12 @@ func NewDeleteInternalServerErrorResponseBody(res *goa.ServiceError) *DeleteInte
 	return body
 }
 
-// NewCreatePayload builds a user service create endpoint payload.
-func NewCreatePayload(body *CreateRequestBody) *user.CreatePayload {
-	v := &user.CreatePayload{}
-	v.User = unmarshalUserInputRequestBodyToUserUserInput(body.User)
+// NewCreateUserInput builds a user service create endpoint payload.
+func NewCreateUserInput(body *CreateRequestBody) *user.UserInput {
+	v := &user.UserInput{
+		Username: *body.Username,
+		Password: *body.Password,
+	}
 
 	return v
 }
@@ -172,20 +169,6 @@ func NewDeleteUserPayload(authorization string) *user.DeleteUserPayload {
 
 // ValidateCreateRequestBody runs the validations defined on CreateRequestBody
 func ValidateCreateRequestBody(body *CreateRequestBody) (err error) {
-	if body.User == nil {
-		err = goa.MergeErrors(err, goa.MissingFieldError("user", "body"))
-	}
-	if body.User != nil {
-		if err2 := ValidateUserInputRequestBody(body.User); err2 != nil {
-			err = goa.MergeErrors(err, err2)
-		}
-	}
-	return
-}
-
-// ValidateUserInputRequestBody runs the validations defined on
-// UserInputRequestBody
-func ValidateUserInputRequestBody(body *UserInputRequestBody) (err error) {
 	if body.Username == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("username", "body"))
 	}

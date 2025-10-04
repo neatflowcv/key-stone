@@ -32,16 +32,12 @@ func UsageCommands() []string {
 // UsageExamples produces an example of a valid invocation of the CLI tool.
 func UsageExamples() string {
 	return os.Args[0] + ` user create --body '{
-      "user": {
-         "password": "Occaecati vel adipisci.",
-         "username": "Quia architecto veritatis deleniti ea perferendis."
-      }
+      "password": "Occaecati vel adipisci.",
+      "username": "Quia architecto veritatis deleniti ea perferendis."
    }'` + "\n" +
 		os.Args[0] + ` token issue --body '{
-      "user": {
-         "password": "Illo et rerum quia odit voluptas.",
-         "username": "Esse sapiente temporibus vel."
-      }
+      "password": "Illo et rerum quia odit voluptas.",
+      "username": "Esse sapiente temporibus vel."
    }'` + "\n" +
 		""
 }
@@ -211,10 +207,8 @@ func userCreateUsage() {
 	fmt.Fprintln(os.Stderr)
 	fmt.Fprintln(os.Stderr, "Example:")
 	fmt.Fprintf(os.Stderr, "    %s %s\n", os.Args[0], `user create --body '{
-      "user": {
-         "password": "Occaecati vel adipisci.",
-         "username": "Quia architecto veritatis deleniti ea perferendis."
-      }
+      "password": "Occaecati vel adipisci.",
+      "username": "Quia architecto veritatis deleniti ea perferendis."
    }'`)
 }
 
@@ -265,10 +259,8 @@ func tokenIssueUsage() {
 	fmt.Fprintln(os.Stderr)
 	fmt.Fprintln(os.Stderr, "Example:")
 	fmt.Fprintf(os.Stderr, "    %s %s\n", os.Args[0], `token issue --body '{
-      "user": {
-         "password": "Illo et rerum quia odit voluptas.",
-         "username": "Esse sapiente temporibus vel."
-      }
+      "password": "Illo et rerum quia odit voluptas.",
+      "username": "Esse sapiente temporibus vel."
    }'`)
 }
 
@@ -289,9 +281,7 @@ func tokenRefreshUsage() {
 	fmt.Fprintln(os.Stderr)
 	fmt.Fprintln(os.Stderr, "Example:")
 	fmt.Fprintf(os.Stderr, "    %s %s\n", os.Args[0], `token refresh --body '{
-      "token": {
-         "access_token": "Laboriosam exercitationem.",
-         "refresh_token": "Voluptatem sit culpa."
-      }
+      "access_token": "Laboriosam exercitationem.",
+      "refresh_token": "Voluptatem sit culpa."
    }'`)
 }

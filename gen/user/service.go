@@ -16,7 +16,7 @@ import (
 // Service is the user service interface.
 type Service interface {
 	// Create implements create.
-	Create(context.Context, *CreatePayload) (err error)
+	Create(context.Context, *UserInput) (err error)
 	// Delete implements delete.
 	Delete(context.Context, *DeleteUserPayload) (err error)
 }
@@ -37,17 +37,13 @@ const ServiceName = "user"
 // MethodKey key.
 var MethodNames = [2]string{"create", "delete"}
 
-// CreatePayload is the payload type of the user service create method.
-type CreatePayload struct {
-	User *UserInput
-}
-
 // DeleteUserPayload is the payload type of the user service delete method.
 type DeleteUserPayload struct {
 	// The payload of the user
 	Authorization string
 }
 
+// UserInput is the payload type of the user service create method.
 type UserInput struct {
 	// The name of the user
 	Username string

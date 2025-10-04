@@ -24,11 +24,7 @@ var _ = Service("user", func() {
 	Error("InternalServerError", ErrorResult, "Internal Server Error")
 
 	Method("create", func() {
-		Payload(func() {
-			Attribute("user", UserInput)
-
-			Required("user")
-		})
+		Payload(UserInput)
 
 		HTTP(func() {
 			POST("/")
@@ -62,12 +58,7 @@ var _ = Service("token", func() {
 	Error("InternalServerError", ErrorResult, "Internal Server Error")
 
 	Method("issue", func() {
-		Payload(func() {
-			Attribute("user", IssueInput)
-
-			Required("user")
-		})
-
+		Payload(IssueInput)
 		Result(TokenDetail)
 
 		HTTP(func() {
@@ -79,12 +70,7 @@ var _ = Service("token", func() {
 	})
 
 	Method("refresh", func() {
-		Payload(func() {
-			Attribute("token", RefreshInput)
-
-			Required("token")
-		})
-
+		Payload(RefreshInput)
 		Result(TokenDetail)
 
 		HTTP(func() {

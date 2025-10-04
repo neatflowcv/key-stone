@@ -33,7 +33,7 @@ func NewClient(create, delete_ goa.Endpoint) *Client {
 //   - "UserAlreadyExists" (type *goa.ServiceError): User Already Exists
 //   - "InternalServerError" (type *goa.ServiceError): Internal Server Error
 //   - error: internal error
-func (c *Client) Create(ctx context.Context, p *CreatePayload) (err error) {
+func (c *Client) Create(ctx context.Context, p *UserInput) (err error) {
 	_, err = c.CreateEndpoint(ctx, p)
 	return
 }

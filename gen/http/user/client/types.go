@@ -15,7 +15,10 @@ import (
 // CreateRequestBody is the type of the "user" service "create" endpoint HTTP
 // request body.
 type CreateRequestBody struct {
-	User *UserInputRequestBody `form:"user" json:"user" xml:"user"`
+	// The name of the user
+	Username string `form:"username" json:"username" xml:"username"`
+	// The password of the user
+	Password string `form:"password" json:"password" xml:"password"`
 }
 
 // CreateUserAlreadyExistsResponseBody is the type of the "user" service
@@ -90,20 +93,12 @@ type DeleteInternalServerErrorResponseBody struct {
 	Fault *bool `form:"fault,omitempty" json:"fault,omitempty" xml:"fault,omitempty"`
 }
 
-// UserInputRequestBody is used to define fields on request body types.
-type UserInputRequestBody struct {
-	// The name of the user
-	Username string `form:"username" json:"username" xml:"username"`
-	// The password of the user
-	Password string `form:"password" json:"password" xml:"password"`
-}
-
 // NewCreateRequestBody builds the HTTP request body from the payload of the
 // "create" endpoint of the "user" service.
-func NewCreateRequestBody(p *user.CreatePayload) *CreateRequestBody {
-	body := &CreateRequestBody{}
-	if p.User != nil {
-		body.User = marshalUserUserInputToUserInputRequestBody(p.User)
+func NewCreateRequestBody(p *user.UserInput) *CreateRequestBody {
+	body := &CreateRequestBody{
+		Username: p.Username,
+		Password: p.Password,
 	}
 	return body
 }

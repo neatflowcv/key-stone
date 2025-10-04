@@ -37,7 +37,7 @@ func (e *Endpoints) Use(m func(goa.Endpoint) goa.Endpoint) {
 // of service "token".
 func NewIssueEndpoint(s Service) goa.Endpoint {
 	return func(ctx context.Context, req any) (any, error) {
-		p := req.(*IssuePayload)
+		p := req.(*IssueInput)
 		return s.Issue(ctx, p)
 	}
 }
@@ -46,7 +46,7 @@ func NewIssueEndpoint(s Service) goa.Endpoint {
 // "refresh" of service "token".
 func NewRefreshEndpoint(s Service) goa.Endpoint {
 	return func(ctx context.Context, req any) (any, error) {
-		p := req.(*RefreshPayload)
+		p := req.(*RefreshInput)
 		return s.Refresh(ctx, p)
 	}
 }

@@ -37,9 +37,9 @@ func (c *Client) BuildCreateRequest(ctx context.Context, v any) (*http.Request, 
 // server.
 func EncodeCreateRequest(encoder func(*http.Request) goahttp.Encoder) func(*http.Request, any) error {
 	return func(req *http.Request, v any) error {
-		p, ok := v.(*user.CreatePayload)
+		p, ok := v.(*user.UserInput)
 		if !ok {
-			return goahttp.ErrInvalidType("user", "create", "*user.CreatePayload", v)
+			return goahttp.ErrInvalidType("user", "create", "*user.UserInput", v)
 		}
 		body := NewCreateRequestBody(p)
 		if err := encoder(req).Encode(&body); err != nil {
@@ -196,26 +196,4 @@ func DecodeDeleteResponse(decoder func(*http.Response) goahttp.Decoder, restoreB
 			return nil, goahttp.ErrInvalidResponse("user", "delete", resp.StatusCode, string(body))
 		}
 	}
-}
-
-// marshalUserUserInputToUserInputRequestBody builds a value of type
-// *UserInputRequestBody from a value of type *user.UserInput.
-func marshalUserUserInputToUserInputRequestBody(v *user.UserInput) *UserInputRequestBody {
-	res := &UserInputRequestBody{
-		Username: v.Username,
-		Password: v.Password,
-	}
-
-	return res
-}
-
-// marshalUserInputRequestBodyToUserUserInput builds a value of type
-// *user.UserInput from a value of type *UserInputRequestBody.
-func marshalUserInputRequestBodyToUserUserInput(v *UserInputRequestBody) *user.UserInput {
-	res := &user.UserInput{
-		Username: v.Username,
-		Password: v.Password,
-	}
-
-	return res
 }

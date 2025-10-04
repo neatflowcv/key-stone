@@ -32,8 +32,8 @@ func EncodeIssueResponse(encoder func(context.Context, http.ResponseWriter) goah
 
 // DecodeIssueRequest returns a decoder for requests sent to the token issue
 // endpoint.
-func DecodeIssueRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (*token.IssuePayload, error) {
-	return func(r *http.Request) (*token.IssuePayload, error) {
+func DecodeIssueRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (*token.IssueInput, error) {
+	return func(r *http.Request) (*token.IssueInput, error) {
 		var (
 			body IssueRequestBody
 			err  error
@@ -53,7 +53,7 @@ func DecodeIssueRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.D
 		if err != nil {
 			return nil, err
 		}
-		payload := NewIssuePayload(&body)
+		payload := NewIssueInput(&body)
 
 		return payload, nil
 	}
@@ -102,8 +102,8 @@ func EncodeRefreshResponse(encoder func(context.Context, http.ResponseWriter) go
 
 // DecodeRefreshRequest returns a decoder for requests sent to the token
 // refresh endpoint.
-func DecodeRefreshRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (*token.RefreshPayload, error) {
-	return func(r *http.Request) (*token.RefreshPayload, error) {
+func DecodeRefreshRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (*token.RefreshInput, error) {
+	return func(r *http.Request) (*token.RefreshInput, error) {
 		var (
 			body RefreshRequestBody
 			err  error
@@ -123,7 +123,7 @@ func DecodeRefreshRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp
 		if err != nil {
 			return nil, err
 		}
-		payload := NewRefreshPayload(&body)
+		payload := NewRefreshInput(&body)
 
 		return payload, nil
 	}
@@ -169,26 +169,4 @@ func EncodeRefreshError(encoder func(context.Context, http.ResponseWriter) goaht
 			return encodeError(ctx, w, v)
 		}
 	}
-}
-
-// unmarshalIssueInputRequestBodyToTokenIssueInput builds a value of type
-// *token.IssueInput from a value of type *IssueInputRequestBody.
-func unmarshalIssueInputRequestBodyToTokenIssueInput(v *IssueInputRequestBody) *token.IssueInput {
-	res := &token.IssueInput{
-		Username: *v.Username,
-		Password: *v.Password,
-	}
-
-	return res
-}
-
-// unmarshalRefreshInputRequestBodyToTokenRefreshInput builds a value of type
-// *token.RefreshInput from a value of type *RefreshInputRequestBody.
-func unmarshalRefreshInputRequestBodyToTokenRefreshInput(v *RefreshInputRequestBody) *token.RefreshInput {
-	res := &token.RefreshInput{
-		AccessToken:  *v.AccessToken,
-		RefreshToken: *v.RefreshToken,
-	}
-
-	return res
 }
