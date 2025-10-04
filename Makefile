@@ -13,6 +13,7 @@ update:
 
 .PHONY: docs
 docs:
+	# go install goa.design/goa/v3/cmd/goa@latest
 	goa gen github.com/neatflowcv/key-stone/design
 
 .PHONY: lint
