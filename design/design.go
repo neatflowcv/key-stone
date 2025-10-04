@@ -19,8 +19,8 @@ var _ = Service("user", func() {
 		Path("/users")
 	})
 
-	Error("BadRequest", ErrorResult, "Bad Request")
 	Error("Unauthorized", ErrorResult, "Unauthorized")
+	Error("InternalServerError", ErrorResult, "Internal Server Error")
 
 	Method("create", func() {
 		Payload(func() {
@@ -33,7 +33,6 @@ var _ = Service("user", func() {
 			POST("/")
 
 			Response(StatusNoContent)
-			Response("BadRequest", StatusBadRequest)
 		})
 	})
 	Method("delete", func() {
@@ -55,8 +54,8 @@ var _ = Service("token", func() {
 		Path("/auth")
 	})
 
-	Error("BadRequest", ErrorResult, "Bad Request")
 	Error("Unauthorized", ErrorResult, "Unauthorized")
+	Error("InternalServerError", ErrorResult, "Internal Server Error")
 
 	Method("issue", func() {
 		Payload(func() {
@@ -71,7 +70,6 @@ var _ = Service("token", func() {
 			POST("/")
 
 			Response(StatusOK)
-			Response("BadRequest", StatusBadRequest)
 			Response("Unauthorized", StatusUnauthorized)
 		})
 	})
@@ -89,8 +87,8 @@ var _ = Service("token", func() {
 			POST("/refresh")
 
 			Response(StatusOK)
-			Response("BadRequest", StatusBadRequest)
 			Response("Unauthorized", StatusUnauthorized)
+			Response("InternalServerError", StatusInternalServerError)
 		})
 	})
 })
