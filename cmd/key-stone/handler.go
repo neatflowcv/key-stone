@@ -3,12 +3,13 @@ package main
 import (
 	"context"
 	"errors"
-	"log"
 	"strings"
 	"time"
 
 	"github.com/neatflowcv/key-stone/gen/token"
 	"github.com/neatflowcv/key-stone/gen/user"
+	"github.com/neatflowcv/key-stone/internal/pkg/credentialrepository"
+	"github.com/neatflowcv/key-stone/internal/pkg/domain"
 	"github.com/neatflowcv/key-stone/internal/pkg/tokengenerator"
 )
 
@@ -16,16 +17,20 @@ var _ user.Service = (*Handler)(nil)
 var _ token.Service = (*Handler)(nil)
 
 type Handler struct {
-	users    map[string]user.UserInput
-	pubVault tokengenerator.Generator
-	priVault tokengenerator.Generator
+	repo   credentialrepository.Repository
+	pubGen tokengenerator.Generator
+	priGen tokengenerator.Generator
 }
 
-func NewHandler(pubVault tokengenerator.Generator, priVault tokengenerator.Generator) *Handler {
+func NewHandler(
+	repo credentialrepository.Repository,
+	pubGen tokengenerator.Generator,
+	priGen tokengenerator.Generator,
+) *Handler {
 	return &Handler{
-		users:    make(map[string]user.UserInput),
-		pubVault: pubVault,
-		priVault: priVault,
+		repo:   repo,
+		pubGen: pubGen,
+		priGen: priGen,
 	}
 }
 
@@ -34,18 +39,22 @@ var (
 )
 
 func (h *Handler) Issue(ctx context.Context, payload *token.IssuePayload) (*token.TokenDetail, error) {
-	user, ok := h.users[payload.User.Username]
-	if !ok {
-		return nil, token.MakeUnauthorized(ErrUnauthorized)
+	cred, err := h.repo.GetCredential(ctx, payload.User.Username)
+	if err != nil {
+		if errors.Is(err, credentialrepository.ErrCredentialNotFound) {
+			return nil, token.MakeUnauthorized(ErrUnauthorized)
+		}
+
+		return nil, token.MakeInternalServerError(err)
 	}
 
-	if user.Password != payload.User.Password {
+	if cred.Password() != payload.User.Password {
 		return nil, token.MakeUnauthorized(ErrUnauthorized)
 	}
 
 	now := time.Now()
 
-	return h.generate(now, user.Username)
+	return h.generate(now, cred.Username())
 }
 
 func (h *Handler) Refresh(ctx context.Context, payload *token.RefreshPayload) (*token.TokenDetail, error) {
@@ -54,19 +63,27 @@ func (h *Handler) Refresh(ctx context.Context, payload *token.RefreshPayload) (*
 		return nil, err
 	}
 
-	user, ok := h.users[subject]
-	if !ok {
-		return nil, token.MakeUnauthorized(ErrUnauthorized)
+	user, err := h.repo.GetCredential(ctx, subject)
+	if err != nil {
+		if errors.Is(err, credentialrepository.ErrCredentialNotFound) {
+			return nil, token.MakeUnauthorized(ErrUnauthorized)
+		}
+
+		return nil, token.MakeInternalServerError(err)
 	}
 
 	now := time.Now()
 
-	return h.generate(now, user.Username)
+	return h.generate(now, user.Username())
 }
 
 func (h *Handler) Create(ctx context.Context, payload *user.CreatePayload) error {
-	log.Printf("payload %+v", payload)
-	h.users[payload.User.Username] = *payload.User
+	cred := domain.NewCredential(payload.User.Username, payload.User.Password)
+
+	err := h.repo.CreateCredential(ctx, cred)
+	if err != nil {
+		return user.MakeInternalServerError(err)
+	}
 
 	return nil
 }
@@ -75,12 +92,24 @@ func (h *Handler) Delete(ctx context.Context, payload *user.DeleteUserPayload) e
 	now := time.Now()
 	token := strings.TrimPrefix(payload.Authorization, "Bearer ")
 
-	subject, err := h.pubVault.ParseToken(token, now)
+	subject, err := h.pubGen.ParseToken(token, now)
 	if err == nil {
 		return nil
 	}
 
-	delete(h.users, subject)
+	cred, err := h.repo.GetCredential(ctx, subject)
+	if err != nil {
+		if errors.Is(err, credentialrepository.ErrCredentialNotFound) {
+			return user.MakeUnauthorized(ErrUnauthorized)
+		}
+
+		return user.MakeInternalServerError(err)
+	}
+
+	err = h.repo.DeleteCredential(ctx, cred)
+	if err != nil {
+		return user.MakeUnauthorized(err)
+	}
 
 	return nil
 }
@@ -88,12 +117,12 @@ func (h *Handler) Delete(ctx context.Context, payload *user.DeleteUserPayload) e
 func (h *Handler) getSubject(payload *token.RefreshPayload) (string, error) {
 	now := time.Now()
 
-	subject, err := h.pubVault.ParseToken(payload.Token.AccessToken, now)
+	subject, err := h.pubGen.ParseToken(payload.Token.AccessToken, now)
 	if err == nil {
 		return subject, nil
 	}
 
-	subject, err = h.priVault.ParseToken(payload.Token.RefreshToken, now)
+	subject, err = h.priGen.ParseToken(payload.Token.RefreshToken, now)
 	if err == nil {
 		return subject, nil
 	}
@@ -107,8 +136,8 @@ func (h *Handler) generate(now time.Time, subject string) (*token.TokenDetail, e
 		refreshTokenDuration = time.Hour * 24 * 14
 	)
 
-	accessToken := h.pubVault.GenerateToken(subject, now, accessTokenDuration)
-	refreshToken := h.priVault.GenerateToken(subject, now, refreshTokenDuration)
+	accessToken := h.pubGen.GenerateToken(subject, now, accessTokenDuration)
+	refreshToken := h.priGen.GenerateToken(subject, now, refreshTokenDuration)
 	tokenType := "Bearer"
 	expiresIn := int(accessTokenDuration.Seconds())
 
