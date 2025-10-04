@@ -12,6 +12,8 @@ import (
 
 	_ "goa.design/goa/v3/codegen"
 	_ "goa.design/goa/v3/codegen/generator"
+
+	vaultgenerator "github.com/neatflowcv/key-stone/internal/pkg/tokengenerator/vault"
 )
 
 var version = "dev"
@@ -19,7 +21,10 @@ var version = "dev"
 func main() {
 	log.Println("version", version)
 
-	service := NewHandler()
+	pubVault := vaultgenerator.NewGenerator("key-stone", []byte("public-key"))
+	priVault := vaultgenerator.NewGenerator("key-stone", []byte("private-key"))
+
+	service := NewHandler(pubVault, priVault)
 	userEndpoints := user.NewEndpoints(service)
 	tokenEndpoints := token.NewEndpoints(service)
 

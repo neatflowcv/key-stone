@@ -9,7 +9,7 @@ import (
 
 	"github.com/neatflowcv/key-stone/gen/token"
 	"github.com/neatflowcv/key-stone/gen/user"
-	"github.com/neatflowcv/key-stone/pkg/vault"
+	"github.com/neatflowcv/key-stone/internal/pkg/tokengenerator"
 )
 
 var _ user.Service = (*Handler)(nil)
@@ -17,15 +17,15 @@ var _ token.Service = (*Handler)(nil)
 
 type Handler struct {
 	users    map[string]user.UserInput
-	pubVault *vault.Vault
-	priVault *vault.Vault
+	pubVault tokengenerator.Generator
+	priVault tokengenerator.Generator
 }
 
-func NewHandler() *Handler {
+func NewHandler(pubVault tokengenerator.Generator, priVault tokengenerator.Generator) *Handler {
 	return &Handler{
 		users:    make(map[string]user.UserInput),
-		pubVault: vault.NewVault("key-stone", []byte("public-key")),
-		priVault: vault.NewVault("key-stone", []byte("private-key")),
+		pubVault: pubVault,
+		priVault: priVault,
 	}
 }
 
@@ -75,7 +75,7 @@ func (h *Handler) Delete(ctx context.Context, payload *user.DeleteUserPayload) e
 	now := time.Now()
 	token := strings.TrimPrefix(payload.Authorization, "Bearer ")
 
-	subject, err := h.pubVault.Decrypt(token, now)
+	subject, err := h.pubVault.ParseToken(token, now)
 	if err == nil {
 		return nil
 	}
@@ -88,12 +88,12 @@ func (h *Handler) Delete(ctx context.Context, payload *user.DeleteUserPayload) e
 func (h *Handler) getSubject(payload *token.RefreshPayload) (string, error) {
 	now := time.Now()
 
-	subject, err := h.pubVault.Decrypt(payload.Token.AccessToken, now)
+	subject, err := h.pubVault.ParseToken(payload.Token.AccessToken, now)
 	if err == nil {
 		return subject, nil
 	}
 
-	subject, err = h.priVault.Decrypt(payload.Token.RefreshToken, now)
+	subject, err = h.priVault.ParseToken(payload.Token.RefreshToken, now)
 	if err == nil {
 		return subject, nil
 	}
@@ -107,8 +107,8 @@ func (h *Handler) generate(now time.Time, subject string) (*token.TokenDetail, e
 		refreshTokenDuration = time.Hour * 24 * 14
 	)
 
-	accessToken := h.pubVault.Encrypt(subject, now, accessTokenDuration)
-	refreshToken := h.priVault.Encrypt(subject, now, refreshTokenDuration)
+	accessToken := h.pubVault.GenerateToken(subject, now, accessTokenDuration)
+	refreshToken := h.priVault.GenerateToken(subject, now, refreshTokenDuration)
 	tokenType := "Bearer"
 	expiresIn := int(accessTokenDuration.Seconds())
 
