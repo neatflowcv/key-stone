@@ -131,15 +131,12 @@ func (h *Handler) getSubject(payload *token.RefreshPayload) (string, error) {
 }
 
 func (h *Handler) generate(now time.Time, subject string) (*token.TokenDetail, error) {
-	const (
-		accessTokenDuration  = time.Minute * 15
-		refreshTokenDuration = time.Hour * 24 * 14
-	)
+	policy := domain.NewTokenPolicy()
 
-	accessToken := h.pubGen.GenerateToken(subject, now, accessTokenDuration)
-	refreshToken := h.priGen.GenerateToken(subject, now, refreshTokenDuration)
+	accessToken := h.pubGen.GenerateToken(subject, now, policy.AccessTokenDuration())
+	refreshToken := h.priGen.GenerateToken(subject, now, policy.RefreshTokenDuration())
 	tokenType := "Bearer"
-	expiresIn := int(accessTokenDuration.Seconds())
+	expiresIn := int(policy.AccessTokenDuration().Seconds())
 
 	return &token.TokenDetail{
 		AccessToken:  accessToken,
