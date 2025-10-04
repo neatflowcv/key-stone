@@ -3,29 +3,26 @@ package main
 import (
 	"context"
 	"errors"
-	"strings"
 
 	"github.com/neatflowcv/key-stone/gen/token"
-	"github.com/neatflowcv/key-stone/gen/user"
 	"github.com/neatflowcv/key-stone/internal/app/flow"
 )
 
-var _ user.Service = (*Handler)(nil)
-var _ token.Service = (*Handler)(nil)
+var _ token.Service = (*TokenHandler)(nil)
 
-type Handler struct {
+type TokenHandler struct {
 	service *flow.Service
 }
 
-func NewHandler(
+func NewTokenHandler(
 	service *flow.Service,
-) *Handler {
-	return &Handler{
+) *TokenHandler {
+	return &TokenHandler{
 		service: service,
 	}
 }
 
-func (h *Handler) Issue(ctx context.Context, payload *token.IssuePayload) (*token.TokenDetail, error) {
+func (h *TokenHandler) Issue(ctx context.Context, payload *token.IssuePayload) (*token.TokenDetail, error) {
 	tokenSet, err := h.service.CreateToken(ctx, &flow.Credential{
 		Username: payload.User.Username,
 		Password: payload.User.Password,
@@ -49,7 +46,7 @@ func (h *Handler) Issue(ctx context.Context, payload *token.IssuePayload) (*toke
 	}, nil
 }
 
-func (h *Handler) Refresh(ctx context.Context, payload *token.RefreshPayload) (*token.TokenDetail, error) {
+func (h *TokenHandler) Refresh(ctx context.Context, payload *token.RefreshPayload) (*token.TokenDetail, error) {
 	tokenSet, err := h.service.RefreshToken(ctx, &flow.TokenSetInput{
 		AccessToken:  payload.Token.AccessToken,
 		RefreshToken: payload.Token.RefreshToken,
@@ -71,38 +68,4 @@ func (h *Handler) Refresh(ctx context.Context, payload *token.RefreshPayload) (*
 		ExpiresIn:    tokenSet.ExpiresIn,
 		RefreshToken: tokenSet.RefreshToken,
 	}, nil
-}
-
-func (h *Handler) Create(ctx context.Context, payload *user.CreatePayload) error {
-	err := h.service.CreateUser(ctx, &flow.Credential{
-		Username: payload.User.Username,
-		Password: payload.User.Password,
-	})
-	if err != nil {
-		switch {
-		case errors.Is(err, flow.ErrUserAlreadyExists):
-			return user.MakeUserAlreadyExists(err)
-		default:
-			return user.MakeInternalServerError(err)
-		}
-	}
-
-	return nil
-}
-
-func (h *Handler) Delete(ctx context.Context, payload *user.DeleteUserPayload) error {
-	token := strings.TrimPrefix(payload.Authorization, "Bearer ")
-
-	err := h.service.DeleteUser(ctx, token)
-	if err != nil {
-		switch {
-		case errors.Is(err, flow.ErrTokenInvalid),
-			errors.Is(err, flow.ErrUserNotFound):
-			return user.MakeUnauthorized(err)
-		default:
-			return user.MakeInternalServerError(err)
-		}
-	}
-
-	return nil
 }

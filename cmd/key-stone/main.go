@@ -29,19 +29,19 @@ func main() {
 
 	service := flow.NewService(repository, pubVault, priVault)
 
-	handler := NewHandler(service)
-	userEndpoints := user.NewEndpoints(handler)
-	tokenEndpoints := token.NewEndpoints(handler)
-
 	mux := goahttp.NewMuxer()
 	requestDecoder := goahttp.RequestDecoder
 	responseEncoder := goahttp.ResponseEncoder
 
-	userHandler := userserver.New(userEndpoints, mux, requestDecoder, responseEncoder, nil, nil)
-	tokenHandler := tokenserver.New(tokenEndpoints, mux, requestDecoder, responseEncoder, nil, nil)
+	userHandler := NewUserHandler(service)
+	userEndpoints := user.NewEndpoints(userHandler)
+	userServer := userserver.New(userEndpoints, mux, requestDecoder, responseEncoder, nil, nil)
+	userserver.Mount(mux, userServer)
 
-	userserver.Mount(mux, userHandler)
-	tokenserver.Mount(mux, tokenHandler)
+	tokenHandler := NewTokenHandler(service)
+	tokenEndpoints := token.NewEndpoints(tokenHandler)
+	tokenServer := tokenserver.New(tokenEndpoints, mux, requestDecoder, responseEncoder, nil, nil)
+	tokenserver.Mount(mux, tokenServer)
 
 	port := "8080"
 	server := &http.Server{Addr: ":" + port, Handler: mux} //nolint:exhaustruct,gosec
