@@ -39,8 +39,8 @@ func UsageExamples() string {
    }'` + "\n" +
 		os.Args[0] + ` token issue --body '{
       "user": {
-         "password": "Dolores fuga asperiores voluptatem aspernatur eum.",
-         "username": "Explicabo placeat."
+         "password": "Illo et rerum quia odit voluptas.",
+         "username": "Esse sapiente temporibus vel."
       }
    }'` + "\n" +
 		""
@@ -234,7 +234,7 @@ func userDeleteUsage() {
 	// Example block: pass example as parameter to avoid format parsing of % characters
 	fmt.Fprintln(os.Stderr)
 	fmt.Fprintln(os.Stderr, "Example:")
-	fmt.Fprintf(os.Stderr, "    %s %s\n", os.Args[0], `user delete --authorization "Deserunt enim ut consequatur tempora."`)
+	fmt.Fprintf(os.Stderr, "    %s %s\n", os.Args[0], `user delete --authorization "Voluptas explicabo et explicabo placeat."`)
 }
 
 // tokenUsage displays the usage of the token command and its subcommands.
@@ -266,8 +266,8 @@ func tokenIssueUsage() {
 	fmt.Fprintln(os.Stderr, "Example:")
 	fmt.Fprintf(os.Stderr, "    %s %s\n", os.Args[0], `token issue --body '{
       "user": {
-         "password": "Dolores fuga asperiores voluptatem aspernatur eum.",
-         "username": "Explicabo placeat."
+         "password": "Illo et rerum quia odit voluptas.",
+         "username": "Esse sapiente temporibus vel."
       }
    }'`)
 }
@@ -290,8 +290,8 @@ func tokenRefreshUsage() {
 	fmt.Fprintln(os.Stderr, "Example:")
 	fmt.Fprintf(os.Stderr, "    %s %s\n", os.Args[0], `token refresh --body '{
       "token": {
-         "access_token": "Et quia illum.",
-         "refresh_token": "Distinctio quam sunt est sed alias."
+         "access_token": "Laboriosam exercitationem.",
+         "refresh_token": "Voluptatem sit culpa."
       }
    }'`)
 }

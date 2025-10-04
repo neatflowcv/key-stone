@@ -18,9 +18,63 @@ type CreateRequestBody struct {
 	User *UserInputRequestBody `form:"user,omitempty" json:"user,omitempty" xml:"user,omitempty"`
 }
 
+// CreateUserAlreadyExistsResponseBody is the type of the "user" service
+// "create" endpoint HTTP response body for the "UserAlreadyExists" error.
+type CreateUserAlreadyExistsResponseBody struct {
+	// Name is the name of this class of errors.
+	Name string `form:"name" json:"name" xml:"name"`
+	// ID is a unique identifier for this particular occurrence of the problem.
+	ID string `form:"id" json:"id" xml:"id"`
+	// Message is a human-readable explanation specific to this occurrence of the
+	// problem.
+	Message string `form:"message" json:"message" xml:"message"`
+	// Is the error temporary?
+	Temporary bool `form:"temporary" json:"temporary" xml:"temporary"`
+	// Is the error a timeout?
+	Timeout bool `form:"timeout" json:"timeout" xml:"timeout"`
+	// Is the error a server-side fault?
+	Fault bool `form:"fault" json:"fault" xml:"fault"`
+}
+
+// CreateInternalServerErrorResponseBody is the type of the "user" service
+// "create" endpoint HTTP response body for the "InternalServerError" error.
+type CreateInternalServerErrorResponseBody struct {
+	// Name is the name of this class of errors.
+	Name string `form:"name" json:"name" xml:"name"`
+	// ID is a unique identifier for this particular occurrence of the problem.
+	ID string `form:"id" json:"id" xml:"id"`
+	// Message is a human-readable explanation specific to this occurrence of the
+	// problem.
+	Message string `form:"message" json:"message" xml:"message"`
+	// Is the error temporary?
+	Temporary bool `form:"temporary" json:"temporary" xml:"temporary"`
+	// Is the error a timeout?
+	Timeout bool `form:"timeout" json:"timeout" xml:"timeout"`
+	// Is the error a server-side fault?
+	Fault bool `form:"fault" json:"fault" xml:"fault"`
+}
+
 // DeleteUnauthorizedResponseBody is the type of the "user" service "delete"
 // endpoint HTTP response body for the "Unauthorized" error.
 type DeleteUnauthorizedResponseBody struct {
+	// Name is the name of this class of errors.
+	Name string `form:"name" json:"name" xml:"name"`
+	// ID is a unique identifier for this particular occurrence of the problem.
+	ID string `form:"id" json:"id" xml:"id"`
+	// Message is a human-readable explanation specific to this occurrence of the
+	// problem.
+	Message string `form:"message" json:"message" xml:"message"`
+	// Is the error temporary?
+	Temporary bool `form:"temporary" json:"temporary" xml:"temporary"`
+	// Is the error a timeout?
+	Timeout bool `form:"timeout" json:"timeout" xml:"timeout"`
+	// Is the error a server-side fault?
+	Fault bool `form:"fault" json:"fault" xml:"fault"`
+}
+
+// DeleteInternalServerErrorResponseBody is the type of the "user" service
+// "delete" endpoint HTTP response body for the "InternalServerError" error.
+type DeleteInternalServerErrorResponseBody struct {
 	// Name is the name of this class of errors.
 	Name string `form:"name" json:"name" xml:"name"`
 	// ID is a unique identifier for this particular occurrence of the problem.
@@ -44,10 +98,52 @@ type UserInputRequestBody struct {
 	Password *string `form:"password,omitempty" json:"password,omitempty" xml:"password,omitempty"`
 }
 
+// NewCreateUserAlreadyExistsResponseBody builds the HTTP response body from
+// the result of the "create" endpoint of the "user" service.
+func NewCreateUserAlreadyExistsResponseBody(res *goa.ServiceError) *CreateUserAlreadyExistsResponseBody {
+	body := &CreateUserAlreadyExistsResponseBody{
+		Name:      res.Name,
+		ID:        res.ID,
+		Message:   res.Message,
+		Temporary: res.Temporary,
+		Timeout:   res.Timeout,
+		Fault:     res.Fault,
+	}
+	return body
+}
+
+// NewCreateInternalServerErrorResponseBody builds the HTTP response body from
+// the result of the "create" endpoint of the "user" service.
+func NewCreateInternalServerErrorResponseBody(res *goa.ServiceError) *CreateInternalServerErrorResponseBody {
+	body := &CreateInternalServerErrorResponseBody{
+		Name:      res.Name,
+		ID:        res.ID,
+		Message:   res.Message,
+		Temporary: res.Temporary,
+		Timeout:   res.Timeout,
+		Fault:     res.Fault,
+	}
+	return body
+}
+
 // NewDeleteUnauthorizedResponseBody builds the HTTP response body from the
 // result of the "delete" endpoint of the "user" service.
 func NewDeleteUnauthorizedResponseBody(res *goa.ServiceError) *DeleteUnauthorizedResponseBody {
 	body := &DeleteUnauthorizedResponseBody{
+		Name:      res.Name,
+		ID:        res.ID,
+		Message:   res.Message,
+		Temporary: res.Temporary,
+		Timeout:   res.Timeout,
+		Fault:     res.Fault,
+	}
+	return body
+}
+
+// NewDeleteInternalServerErrorResponseBody builds the HTTP response body from
+// the result of the "delete" endpoint of the "user" service.
+func NewDeleteInternalServerErrorResponseBody(res *goa.ServiceError) *DeleteInternalServerErrorResponseBody {
+	body := &DeleteInternalServerErrorResponseBody{
 		Name:      res.Name,
 		ID:        res.ID,
 		Message:   res.Message,

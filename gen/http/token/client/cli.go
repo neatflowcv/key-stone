@@ -23,7 +23,7 @@ func BuildIssuePayload(tokenIssueBody string) (*token.IssuePayload, error) {
 	{
 		err = json.Unmarshal([]byte(tokenIssueBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"user\": {\n         \"password\": \"Dolores fuga asperiores voluptatem aspernatur eum.\",\n         \"username\": \"Explicabo placeat.\"\n      }\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"user\": {\n         \"password\": \"Illo et rerum quia odit voluptas.\",\n         \"username\": \"Esse sapiente temporibus vel.\"\n      }\n   }'")
 		}
 		if body.User == nil {
 			err = goa.MergeErrors(err, goa.MissingFieldError("user", "body"))
@@ -48,7 +48,7 @@ func BuildRefreshPayload(tokenRefreshBody string) (*token.RefreshPayload, error)
 	{
 		err = json.Unmarshal([]byte(tokenRefreshBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"token\": {\n         \"access_token\": \"Et quia illum.\",\n         \"refresh_token\": \"Distinctio quam sunt est sed alias.\"\n      }\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"token\": {\n         \"access_token\": \"Laboriosam exercitationem.\",\n         \"refresh_token\": \"Voluptatem sit culpa.\"\n      }\n   }'")
 		}
 		if body.Token == nil {
 			err = goa.MergeErrors(err, goa.MissingFieldError("token", "body"))

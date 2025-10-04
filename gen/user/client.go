@@ -30,6 +30,7 @@ func NewClient(create, delete_ goa.Endpoint) *Client {
 // Create calls the "create" endpoint of the "user" service.
 // Create may return the following errors:
 //   - "Unauthorized" (type *goa.ServiceError): Unauthorized
+//   - "UserAlreadyExists" (type *goa.ServiceError): User Already Exists
 //   - "InternalServerError" (type *goa.ServiceError): Internal Server Error
 //   - error: internal error
 func (c *Client) Create(ctx context.Context, p *CreatePayload) (err error) {
@@ -40,6 +41,7 @@ func (c *Client) Create(ctx context.Context, p *CreatePayload) (err error) {
 // Delete calls the "delete" endpoint of the "user" service.
 // Delete may return the following errors:
 //   - "Unauthorized" (type *goa.ServiceError): Unauthorized
+//   - "UserAlreadyExists" (type *goa.ServiceError): User Already Exists
 //   - "InternalServerError" (type *goa.ServiceError): Internal Server Error
 //   - error: internal error
 func (c *Client) Delete(ctx context.Context, p *DeleteUserPayload) (err error) {

@@ -4,144 +4,105 @@ import (
 	"context"
 	"errors"
 	"strings"
-	"time"
 
 	"github.com/neatflowcv/key-stone/gen/token"
 	"github.com/neatflowcv/key-stone/gen/user"
-	"github.com/neatflowcv/key-stone/internal/pkg/credentialrepository"
-	"github.com/neatflowcv/key-stone/internal/pkg/domain"
-	"github.com/neatflowcv/key-stone/internal/pkg/tokengenerator"
+	"github.com/neatflowcv/key-stone/internal/app/flow"
 )
 
 var _ user.Service = (*Handler)(nil)
 var _ token.Service = (*Handler)(nil)
 
 type Handler struct {
-	repo   credentialrepository.Repository
-	pubGen tokengenerator.Generator
-	priGen tokengenerator.Generator
+	service *flow.Service
 }
 
 func NewHandler(
-	repo credentialrepository.Repository,
-	pubGen tokengenerator.Generator,
-	priGen tokengenerator.Generator,
+	service *flow.Service,
 ) *Handler {
 	return &Handler{
-		repo:   repo,
-		pubGen: pubGen,
-		priGen: priGen,
+		service: service,
 	}
 }
 
-var (
-	ErrUnauthorized = errors.New("unauthorized")
-)
-
 func (h *Handler) Issue(ctx context.Context, payload *token.IssuePayload) (*token.TokenDetail, error) {
-	cred, err := h.repo.GetCredential(ctx, payload.User.Username)
+	tokenSet, err := h.service.CreateToken(ctx, &flow.Credential{
+		Username: payload.User.Username,
+		Password: payload.User.Password,
+	})
 	if err != nil {
-		if errors.Is(err, credentialrepository.ErrCredentialNotFound) {
-			return nil, token.MakeUnauthorized(ErrUnauthorized)
+		switch {
+		case errors.Is(err, flow.ErrUserNotFound):
+			return nil, token.MakeUnauthorized(err)
+		case errors.Is(err, flow.ErrUserUnauthorized):
+			return nil, token.MakeUnauthorized(err)
+		default:
+			return nil, token.MakeInternalServerError(err)
 		}
-
-		return nil, token.MakeInternalServerError(err)
 	}
 
-	if cred.Password() != payload.User.Password {
-		return nil, token.MakeUnauthorized(ErrUnauthorized)
-	}
-
-	now := time.Now()
-
-	return h.generate(now, cred.Username())
+	return &token.TokenDetail{
+		AccessToken:  tokenSet.AccessToken,
+		TokenType:    "Bearer",
+		ExpiresIn:    tokenSet.ExpiresIn,
+		RefreshToken: tokenSet.RefreshToken,
+	}, nil
 }
 
 func (h *Handler) Refresh(ctx context.Context, payload *token.RefreshPayload) (*token.TokenDetail, error) {
-	subject, err := h.getSubject(payload)
+	tokenSet, err := h.service.RefreshToken(ctx, &flow.TokenSetInput{
+		AccessToken:  payload.Token.AccessToken,
+		RefreshToken: payload.Token.RefreshToken,
+	})
 	if err != nil {
-		return nil, err
-	}
-
-	user, err := h.repo.GetCredential(ctx, subject)
-	if err != nil {
-		if errors.Is(err, credentialrepository.ErrCredentialNotFound) {
-			return nil, token.MakeUnauthorized(ErrUnauthorized)
+		switch {
+		case errors.Is(err, flow.ErrTokenInvalid):
+			return nil, token.MakeUnauthorized(err)
+		case errors.Is(err, flow.ErrUserNotFound):
+			return nil, token.MakeUnauthorized(err)
+		default:
+			return nil, token.MakeInternalServerError(err)
 		}
-
-		return nil, token.MakeInternalServerError(err)
 	}
 
-	now := time.Now()
-
-	return h.generate(now, user.Username())
+	return &token.TokenDetail{
+		AccessToken:  tokenSet.AccessToken,
+		TokenType:    "Bearer",
+		ExpiresIn:    tokenSet.ExpiresIn,
+		RefreshToken: tokenSet.RefreshToken,
+	}, nil
 }
 
 func (h *Handler) Create(ctx context.Context, payload *user.CreatePayload) error {
-	cred := domain.NewCredential(payload.User.Username, payload.User.Password)
-
-	err := h.repo.CreateCredential(ctx, cred)
+	err := h.service.CreateUser(ctx, &flow.Credential{
+		Username: payload.User.Username,
+		Password: payload.User.Password,
+	})
 	if err != nil {
-		return user.MakeInternalServerError(err)
+		switch {
+		case errors.Is(err, flow.ErrUserAlreadyExists):
+			return user.MakeUserAlreadyExists(err)
+		default:
+			return user.MakeInternalServerError(err)
+		}
 	}
 
 	return nil
 }
 
 func (h *Handler) Delete(ctx context.Context, payload *user.DeleteUserPayload) error {
-	now := time.Now()
 	token := strings.TrimPrefix(payload.Authorization, "Bearer ")
 
-	subject, err := h.pubGen.ParseToken(token, now)
-	if err == nil {
-		return nil
-	}
-
-	cred, err := h.repo.GetCredential(ctx, subject)
+	err := h.service.DeleteUser(ctx, token)
 	if err != nil {
-		if errors.Is(err, credentialrepository.ErrCredentialNotFound) {
-			return user.MakeUnauthorized(ErrUnauthorized)
+		switch {
+		case errors.Is(err, flow.ErrTokenInvalid),
+			errors.Is(err, flow.ErrUserNotFound):
+			return user.MakeUnauthorized(err)
+		default:
+			return user.MakeInternalServerError(err)
 		}
-
-		return user.MakeInternalServerError(err)
-	}
-
-	err = h.repo.DeleteCredential(ctx, cred)
-	if err != nil {
-		return user.MakeUnauthorized(err)
 	}
 
 	return nil
-}
-
-func (h *Handler) getSubject(payload *token.RefreshPayload) (string, error) {
-	now := time.Now()
-
-	subject, err := h.pubGen.ParseToken(payload.Token.AccessToken, now)
-	if err == nil {
-		return subject, nil
-	}
-
-	subject, err = h.priGen.ParseToken(payload.Token.RefreshToken, now)
-	if err == nil {
-		return subject, nil
-	}
-
-	return "", token.MakeUnauthorized(ErrUnauthorized)
-}
-
-func (h *Handler) generate(now time.Time, subject string) (*token.TokenDetail, error) {
-	policy := domain.NewTokenPolicy()
-
-	accessToken := h.pubGen.GenerateToken(subject, now, policy.AccessTokenDuration())
-	refreshToken := h.priGen.GenerateToken(subject, now, policy.RefreshTokenDuration())
-	tokenType := "Bearer"
-	expiresIn := int(policy.AccessTokenDuration().Seconds())
-
-	return &token.TokenDetail{
-		AccessToken:  accessToken,
-		TokenType:    tokenType,
-		ExpiresIn:    expiresIn,
-		RefreshToken: refreshToken,
-	}, nil
 }

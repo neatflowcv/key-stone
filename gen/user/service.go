@@ -60,6 +60,11 @@ func MakeUnauthorized(err error) *goa.ServiceError {
 	return goa.NewServiceError(err, "Unauthorized", false, false, false)
 }
 
+// MakeUserAlreadyExists builds a goa.ServiceError from an error.
+func MakeUserAlreadyExists(err error) *goa.ServiceError {
+	return goa.NewServiceError(err, "UserAlreadyExists", false, false, false)
+}
+
 // MakeInternalServerError builds a goa.ServiceError from an error.
 func MakeInternalServerError(err error) *goa.ServiceError {
 	return goa.NewServiceError(err, "InternalServerError", false, false, false)

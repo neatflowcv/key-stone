@@ -52,6 +52,10 @@ func EncodeCreateRequest(encoder func(*http.Request) goahttp.Encoder) func(*http
 // DecodeCreateResponse returns a decoder for responses returned by the user
 // create endpoint. restoreBody controls whether the response body should be
 // restored after having been read.
+// DecodeCreateResponse may return the following errors:
+//   - "UserAlreadyExists" (type *goa.ServiceError): http.StatusUnauthorized
+//   - "InternalServerError" (type *goa.ServiceError): http.StatusInternalServerError
+//   - error: internal error
 func DecodeCreateResponse(decoder func(*http.Response) goahttp.Decoder, restoreBody bool) func(*http.Response) (any, error) {
 	return func(resp *http.Response) (any, error) {
 		if restoreBody {
@@ -69,6 +73,34 @@ func DecodeCreateResponse(decoder func(*http.Response) goahttp.Decoder, restoreB
 		switch resp.StatusCode {
 		case http.StatusNoContent:
 			return nil, nil
+		case http.StatusUnauthorized:
+			var (
+				body CreateUserAlreadyExistsResponseBody
+				err  error
+			)
+			err = decoder(resp).Decode(&body)
+			if err != nil {
+				return nil, goahttp.ErrDecodingError("user", "create", err)
+			}
+			err = ValidateCreateUserAlreadyExistsResponseBody(&body)
+			if err != nil {
+				return nil, goahttp.ErrValidationError("user", "create", err)
+			}
+			return nil, NewCreateUserAlreadyExists(&body)
+		case http.StatusInternalServerError:
+			var (
+				body CreateInternalServerErrorResponseBody
+				err  error
+			)
+			err = decoder(resp).Decode(&body)
+			if err != nil {
+				return nil, goahttp.ErrDecodingError("user", "create", err)
+			}
+			err = ValidateCreateInternalServerErrorResponseBody(&body)
+			if err != nil {
+				return nil, goahttp.ErrValidationError("user", "create", err)
+			}
+			return nil, NewCreateInternalServerError(&body)
 		default:
 			body, _ := io.ReadAll(resp.Body)
 			return nil, goahttp.ErrInvalidResponse("user", "create", resp.StatusCode, string(body))
@@ -112,6 +144,7 @@ func EncodeDeleteRequest(encoder func(*http.Request) goahttp.Encoder) func(*http
 // restored after having been read.
 // DecodeDeleteResponse may return the following errors:
 //   - "Unauthorized" (type *goa.ServiceError): http.StatusUnauthorized
+//   - "InternalServerError" (type *goa.ServiceError): http.StatusInternalServerError
 //   - error: internal error
 func DecodeDeleteResponse(decoder func(*http.Response) goahttp.Decoder, restoreBody bool) func(*http.Response) (any, error) {
 	return func(resp *http.Response) (any, error) {
@@ -144,6 +177,20 @@ func DecodeDeleteResponse(decoder func(*http.Response) goahttp.Decoder, restoreB
 				return nil, goahttp.ErrValidationError("user", "delete", err)
 			}
 			return nil, NewDeleteUnauthorized(&body)
+		case http.StatusInternalServerError:
+			var (
+				body DeleteInternalServerErrorResponseBody
+				err  error
+			)
+			err = decoder(resp).Decode(&body)
+			if err != nil {
+				return nil, goahttp.ErrDecodingError("user", "delete", err)
+			}
+			err = ValidateDeleteInternalServerErrorResponseBody(&body)
+			if err != nil {
+				return nil, goahttp.ErrValidationError("user", "delete", err)
+			}
+			return nil, NewDeleteInternalServerError(&body)
 		default:
 			body, _ := io.ReadAll(resp.Body)
 			return nil, goahttp.ErrInvalidResponse("user", "delete", resp.StatusCode, string(body))

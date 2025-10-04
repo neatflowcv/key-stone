@@ -20,6 +20,7 @@ var _ = Service("user", func() {
 	})
 
 	Error("Unauthorized", ErrorResult, "Unauthorized")
+	Error("UserAlreadyExists", ErrorResult, "User Already Exists")
 	Error("InternalServerError", ErrorResult, "Internal Server Error")
 
 	Method("create", func() {
@@ -33,6 +34,8 @@ var _ = Service("user", func() {
 			POST("/")
 
 			Response(StatusNoContent)
+			Response("UserAlreadyExists", StatusUnauthorized)
+			Response("InternalServerError", StatusInternalServerError)
 		})
 	})
 	Method("delete", func() {
@@ -45,6 +48,7 @@ var _ = Service("user", func() {
 
 			Response(StatusNoContent)
 			Response("Unauthorized", StatusUnauthorized)
+			Response("InternalServerError", StatusInternalServerError)
 		})
 	})
 })
