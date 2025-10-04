@@ -6,3 +6,6 @@ linters:
     - depguard
     - tagliatelle
     - wsl # deprecated
+  exclusions:
+    paths:
+      - 'gen/'
