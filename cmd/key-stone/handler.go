@@ -75,7 +75,7 @@ func (h *Handler) Delete(ctx context.Context, payload *user.DeleteUserPayload) e
 	now := time.Now()
 	token := strings.TrimPrefix(payload.Authorization, "Bearer ")
 
-	subject, err := h.pubVault.Decrypt(now, token)
+	subject, err := h.pubVault.Decrypt(token, now)
 	if err == nil {
 		return nil
 	}
@@ -88,12 +88,12 @@ func (h *Handler) Delete(ctx context.Context, payload *user.DeleteUserPayload) e
 func (h *Handler) getSubject(payload *token.RefreshPayload) (string, error) {
 	now := time.Now()
 
-	subject, err := h.pubVault.Decrypt(now, payload.Token.AccessToken)
+	subject, err := h.pubVault.Decrypt(payload.Token.AccessToken, now)
 	if err == nil {
 		return subject, nil
 	}
 
-	subject, err = h.priVault.Decrypt(now, payload.Token.RefreshToken)
+	subject, err = h.priVault.Decrypt(payload.Token.RefreshToken, now)
 	if err == nil {
 		return subject, nil
 	}
@@ -107,8 +107,8 @@ func (h *Handler) generate(now time.Time, subject string) (*token.TokenDetail, e
 		refreshTokenDuration = time.Hour * 24 * 14
 	)
 
-	accessToken := h.pubVault.Encrypt(now, accessTokenDuration, subject)
-	refreshToken := h.priVault.Encrypt(now, refreshTokenDuration, subject)
+	accessToken := h.pubVault.Encrypt(subject, now, accessTokenDuration)
+	refreshToken := h.priVault.Encrypt(subject, now, refreshTokenDuration)
 	tokenType := "Bearer"
 	expiresIn := int(accessTokenDuration.Seconds())
 

@@ -20,15 +20,15 @@ func NewVault(issuer string, secretKey []byte) *Vault {
 	}
 }
 
-func (v *Vault) Encrypt(issuedAt time.Time, duration time.Duration, subject string) string {
-	expiresAt := issuedAt.Add(duration)
+func (v *Vault) Encrypt(subject string, now time.Time, duration time.Duration) string {
+	expiresAt := now.Add(duration)
 	claim := &jwt.RegisteredClaims{
 		Issuer:    v.issuer,
 		Subject:   subject,
 		Audience:  jwt.ClaimStrings{},
 		ExpiresAt: jwt.NewNumericDate(expiresAt),
-		NotBefore: jwt.NewNumericDate(issuedAt),
-		IssuedAt:  jwt.NewNumericDate(issuedAt),
+		NotBefore: jwt.NewNumericDate(now),
+		IssuedAt:  jwt.NewNumericDate(now),
 		ID:        "",
 	}
 	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
@@ -41,7 +41,7 @@ func (v *Vault) Encrypt(issuedAt time.Time, duration time.Duration, subject stri
 	return token
 }
 
-func (v *Vault) Decrypt(now time.Time, token string) (string, error) {
+func (v *Vault) Decrypt(token string, now time.Time) (string, error) {
 	var claims jwt.RegisteredClaims
 
 	_, err := jwt.ParseWithClaims(token, &claims, func(token *jwt.Token) (any, error) {
