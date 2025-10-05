@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"runtime/debug"
 
 	_ "goa.design/goa/v3/codegen"
 	_ "goa.design/goa/v3/codegen/generator"
@@ -23,10 +24,17 @@ import (
 	goahttp "goa.design/goa/v3/http"
 )
 
-var version = "dev"
+func version() string {
+	info, ok := debug.ReadBuildInfo()
+	if !ok {
+		return "unknown"
+	}
+
+	return info.Main.Version
+}
 
 func main() {
-	log.Println("version", version)
+	log.Println("version", version())
 
 	const (
 		flagPort           = "port"
