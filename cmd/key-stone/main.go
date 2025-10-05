@@ -54,10 +54,10 @@ func main() {
 				Required: true,
 			},
 		},
-		Action: func(ctx context.Context, cli *cli.Command) error {
-			port := cli.String(flagPort)
-			publicKey := cli.String(flagPublicKey)
-			privateKey := cli.String(flagPrivateKey)
+		Action: func(ctx context.Context, c *cli.Command) error {
+			port := c.String(flagPort)
+			publicKey := c.String(flagPublicKey)
+			privateKey := c.String(flagPrivateKey)
 
 			return startServer(port, publicKey, privateKey)
 		},
