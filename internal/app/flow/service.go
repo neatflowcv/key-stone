@@ -3,11 +3,13 @@ package flow
 import (
 	"context"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/neatflowcv/key-stone/internal/pkg/credentialrepository"
 	"github.com/neatflowcv/key-stone/internal/pkg/domain"
 	"github.com/neatflowcv/key-stone/internal/pkg/tokengenerator"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Service struct {
@@ -32,9 +34,14 @@ func NewService(
 // Returns:
 //   - ErrUserAlreadyExists if the user already exists
 func (s *Service) CreateUser(ctx context.Context, credential *Credential) error {
-	cred := domain.NewCredential(credential.Username, credential.Password)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(credential.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return fmt.Errorf("failed to hash password: %w", err)
+	}
 
-	err := s.repo.CreateCredential(ctx, cred)
+	cred := domain.NewCredential(credential.Username, string(hashedPassword))
+
+	err = s.repo.CreateCredential(ctx, cred)
 	if err != nil {
 		return casError(err, credentialrepository.ErrCredentialAlreadyExists, ErrUserAlreadyExists)
 	}
@@ -75,7 +82,8 @@ func (s *Service) CreateToken(ctx context.Context, credential *Credential) (*Tok
 		return nil, casError(err, credentialrepository.ErrCredentialNotFound, ErrUserNotFound)
 	}
 
-	if cred.Password() != credential.Password {
+	err = bcrypt.CompareHashAndPassword([]byte(cred.Password()), []byte(credential.Password))
+	if err != nil {
 		return nil, ErrUserUnauthorized
 	}
 

@@ -6,6 +6,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/urfave/cli/v3 v3.4.1
 	goa.design/goa/v3 v3.22.5
+	golang.org/x/crypto v0.42.0
 )
 
 require (
