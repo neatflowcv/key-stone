@@ -17,6 +17,7 @@ import (
 	"github.com/neatflowcv/key-stone/gen/user"
 	"github.com/neatflowcv/key-stone/internal/app/flow"
 	"github.com/neatflowcv/key-stone/internal/pkg/credentialrepository/file"
+	"github.com/neatflowcv/key-stone/internal/pkg/hasher/bcrypt"
 	vaultgenerator "github.com/neatflowcv/key-stone/internal/pkg/tokengenerator/vault"
 	"github.com/urfave/cli/v3"
 	goahttp "goa.design/goa/v3/http"
@@ -92,7 +93,8 @@ func startServer(port, publicKey, privateKey, repositoryPath string) error {
 		return fmt.Errorf("failed to create repository: %w", err)
 	}
 
-	service := flow.NewService(repository, pubVault, priVault)
+	hasher := bcrypt.NewHasher()
+	service := flow.NewService(repository, hasher, pubVault, priVault)
 
 	mux := goahttp.NewMuxer()
 	requestDecoder := goahttp.RequestDecoder
