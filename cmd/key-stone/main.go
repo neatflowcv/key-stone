@@ -28,10 +28,16 @@ func main() {
 	log.Println("version", version)
 
 	const (
-		flagPort       = "port"
-		flagPublicKey  = "public-key"
-		flagPrivateKey = "private-key"
+		flagPort           = "port"
+		flagPublicKey      = "public-key"
+		flagPrivateKey     = "private-key"
+		flagRepositoryPath = "repository-path"
 	)
+
+	home, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	app := &cli.Command{ //nolint:exhaustruct
 		Name: "key-stone",
@@ -54,32 +60,34 @@ func main() {
 				Usage:    "The private key to use for the token",
 				Required: true,
 			},
+			&cli.StringFlag{ //nolint:exhaustruct
+				Name:    flagRepositoryPath,
+				Usage:   "The repository path to use for the credentials",
+				Value:   filepath.Join(home, ".key-stone"),
+				Sources: cli.EnvVars("KS_REPOSITORY_PATH"),
+			},
 		},
 		Action: func(ctx context.Context, c *cli.Command) error {
 			port := c.String(flagPort)
 			publicKey := c.String(flagPublicKey)
 			privateKey := c.String(flagPrivateKey)
+			repositoryPath := c.String(flagRepositoryPath)
 
-			return startServer(port, publicKey, privateKey)
+			return startServer(port, publicKey, privateKey, repositoryPath)
 		},
 	}
 
-	err := app.Run(context.Background(), os.Args)
+	err = app.Run(context.Background(), os.Args)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func startServer(port, publicKey, privateKey string) error {
+func startServer(port, publicKey, privateKey, repositoryPath string) error {
 	pubVault := vaultgenerator.NewGenerator("key-stone", []byte(publicKey))
 	priVault := vaultgenerator.NewGenerator("key-stone", []byte(privateKey))
 
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return fmt.Errorf("failed to get user home directory: %w", err)
-	}
-
-	repository, err := file.NewRepository(filepath.Join(home, ".key-stone"))
+	repository, err := file.NewRepository(repositoryPath)
 	if err != nil {
 		return fmt.Errorf("failed to create repository: %w", err)
 	}
