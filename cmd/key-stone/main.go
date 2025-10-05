@@ -6,19 +6,18 @@ import (
 	"net/http"
 	"os"
 
+	_ "goa.design/goa/v3/codegen"
+	_ "goa.design/goa/v3/codegen/generator"
+
 	tokenserver "github.com/neatflowcv/key-stone/gen/http/token/server"
 	userserver "github.com/neatflowcv/key-stone/gen/http/user/server"
 	"github.com/neatflowcv/key-stone/gen/token"
 	"github.com/neatflowcv/key-stone/gen/user"
-	goahttp "goa.design/goa/v3/http"
-
-	_ "goa.design/goa/v3/codegen"
-	_ "goa.design/goa/v3/codegen/generator"
-
 	"github.com/neatflowcv/key-stone/internal/app/flow"
-	"github.com/neatflowcv/key-stone/internal/pkg/credentialrepository/fake"
+	"github.com/neatflowcv/key-stone/internal/pkg/credentialrepository/memory"
 	vaultgenerator "github.com/neatflowcv/key-stone/internal/pkg/tokengenerator/vault"
 	"github.com/urfave/cli/v3"
+	goahttp "goa.design/goa/v3/http"
 )
 
 var version = "dev"
@@ -72,7 +71,7 @@ func main() {
 func startServer(port, publicKey, privateKey string) error {
 	pubVault := vaultgenerator.NewGenerator("key-stone", []byte(publicKey))
 	priVault := vaultgenerator.NewGenerator("key-stone", []byte(privateKey))
-	repository := fake.NewRepository()
+	repository := memory.NewRepository()
 
 	service := flow.NewService(repository, pubVault, priVault)
 
