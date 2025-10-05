@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	_ "goa.design/goa/v3/codegen"
 	_ "goa.design/goa/v3/codegen/generator"
@@ -14,7 +16,7 @@ import (
 	"github.com/neatflowcv/key-stone/gen/token"
 	"github.com/neatflowcv/key-stone/gen/user"
 	"github.com/neatflowcv/key-stone/internal/app/flow"
-	"github.com/neatflowcv/key-stone/internal/pkg/credentialrepository/memory"
+	"github.com/neatflowcv/key-stone/internal/pkg/credentialrepository/file"
 	vaultgenerator "github.com/neatflowcv/key-stone/internal/pkg/tokengenerator/vault"
 	"github.com/urfave/cli/v3"
 	goahttp "goa.design/goa/v3/http"
@@ -71,7 +73,16 @@ func main() {
 func startServer(port, publicKey, privateKey string) error {
 	pubVault := vaultgenerator.NewGenerator("key-stone", []byte(publicKey))
 	priVault := vaultgenerator.NewGenerator("key-stone", []byte(privateKey))
-	repository := memory.NewRepository()
+
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return fmt.Errorf("failed to get user home directory: %w", err)
+	}
+
+	repository, err := file.NewRepository(filepath.Join(home, ".key-stone"))
+	if err != nil {
+		return fmt.Errorf("failed to create repository: %w", err)
+	}
 
 	service := flow.NewService(repository, pubVault, priVault)
 
@@ -93,9 +104,9 @@ func startServer(port, publicKey, privateKey string) error {
 
 	log.Printf("Starting service on :%s", port)
 
-	err := server.ListenAndServe()
+	err = server.ListenAndServe()
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("failed to listen and serve: %w", err)
 	}
 
 	return nil
